@@ -8,6 +8,15 @@
   var SESSION_KEY = "achados3d_analytics_session";
   var STARTED_KEY = "achados3d_analytics_started";
   var CLICKED_KEY = "achados3d_analytics_clicked";
+  var analyticsStarted = false;
+
+  function hasAnalyticsConsent() {
+    return Boolean(window.AchadosPrivacy && window.AchadosPrivacy.hasConsent("analytics"));
+  }
+
+  function startAnalytics() {
+  if (analyticsStarted) return;
+  analyticsStarted = true;
 
   function randomId() {
     if (window.crypto && window.crypto.getRandomValues) {
@@ -63,6 +72,7 @@
   var day = saoPauloDay();
 
   function sendEvent(eventType, ctaId, groupId) {
+    if (!hasAnalyticsConsent()) return Promise.resolve();
     var documentId = randomId();
     var body = {
       fields: {
@@ -106,5 +116,11 @@
       storageSet(CLICKED_KEY, "1");
       sendEvent("cta_click", button.id, button.dataset.groupId || "grupo-1");
     });
+  });
+  }
+
+  if (hasAnalyticsConsent()) startAnalytics();
+  else window.addEventListener("achados3d:consentchange", function (event) {
+    if (event.detail && event.detail.analytics) startAnalytics();
   });
 })();

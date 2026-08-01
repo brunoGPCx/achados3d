@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/privacy.css">
 
 <!--
   TRACKING (opcional): cole seus IDs abaixo para medir conversão do tráfego pago.
@@ -271,7 +272,10 @@
   .final-cta p { color: var(--muted); font-size: 16.5px; margin: 0 auto 28px; max-width: 46ch; font-weight: 400; }
 
   footer { position: relative; z-index: 1; margin: 44px auto 0; padding: 26px 22px 0; font-size: 12px; color: var(--muted-dim); text-align: center; font-weight: 400; }
+  footer p { margin: 0; }
   footer a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+  .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px; margin-top: 10px; }
+  .footer-links button { appearance: none; padding: 0; border: 0; background: none; color: var(--muted); font: inherit; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
 
   section + section { margin-top: 68px; }
   @media (min-width: 900px) { section + section { margin-top: 100px; } }
@@ -469,7 +473,11 @@
   </section>
 
   <footer>
-    Este grupo é independente e não possui vínculo oficial com o WhatsApp ou a Meta.
+    <p>Este grupo é independente e não possui vínculo oficial com o WhatsApp ou a Meta.</p>
+    <div class="footer-links">
+      <a href="/privacidade.html">Aviso de privacidade</a>
+      <button type="button" data-open-privacy>Configurar privacidade</button>
+    </div>
   </footer>
 </div>
 
@@ -573,11 +581,13 @@
     var buttons = document.querySelectorAll('#cta-top, #cta-main, #cta-final, #cta-sticky');
     buttons.forEach(function (btn) {
       btn.addEventListener('click', function () {
-        if (typeof fbq === 'function') { fbq('track', 'Lead'); }
-        if (typeof gtag === 'function') { gtag('event', 'generate_lead', { event_category: 'whatsapp_group' }); }
+        var privacy = window.AchadosPrivacy;
+        if (typeof fbq === 'function' && privacy && privacy.hasConsent('marketing')) { fbq('track', 'Lead'); }
+        if (typeof gtag === 'function' && privacy && privacy.hasConsent('analytics')) { gtag('event', 'generate_lead', { event_category: 'whatsapp_group' }); }
       });
     });
   })();
 </script>
+<script src="/privacy.js" defer></script>
 <script src="/groups.js" defer></script>
 <script src="/analytics.js" defer></script>
