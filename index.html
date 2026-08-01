@@ -62,7 +62,7 @@
   }
 
   a { color: inherit; }
-  img, svg { display: block; max-width: 100%; }
+  img, svg, video { display: block; max-width: 100%; }
   section { position: relative; z-index: 1; }
 
   h1, h2, .display {
@@ -72,11 +72,18 @@
   }
 
   .wrap { max-width: 1160px; margin: 0 auto; padding: 0 22px; }
+  .center { text-align: center; margin-left: auto; margin-right: auto; }
 
-  #bed { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.4; }
+  #bed { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; }
   .glow { position: fixed; z-index: 0; border-radius: 50%; filter: blur(110px); pointer-events: none; }
-  .glow--top { top: -260px; left: 60%; transform: translateX(-50%); width: 820px; height: 520px; background: radial-gradient(closest-side, rgba(255,106,44,.3), transparent 70%); }
-  .glow--bottom { bottom: -300px; left: -180px; width: 640px; height: 540px; background: radial-gradient(closest-side, rgba(255,182,72,.14), transparent 70%); }
+  .glow--top { top: -260px; left: 50%; transform: translateX(-50%); width: 900px; height: 540px; background: radial-gradient(closest-side, rgba(255,106,44,.28), transparent 70%); }
+  .glow--bottom { bottom: -300px; left: -180px; width: 640px; height: 540px; background: radial-gradient(closest-side, rgba(255,182,72,.13), transparent 70%); }
+
+  /* ---------- scroll reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 700ms cubic-bezier(.2,.7,.2,1), transform 700ms cubic-bezier(.2,.7,.2,1); }
+  .reveal.is-visible { opacity: 1; transform: translateY(0); }
+  .reveal-stagger.is-visible > * { animation: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1 !important; transform: none !important; transition: none !important; } }
 
   /* ---------- top bar ---------- */
   .topbar { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 22px 0 0; }
@@ -96,29 +103,29 @@
   @media (max-width: 640px) { .btn-mini { display: none; } }
 
   /* ---------- hero ---------- */
-  .hero { display: grid; grid-template-columns: 1fr; gap: 44px; align-items: center; padding: 36px 0 56px; }
-  @media (min-width: 960px) { .hero { grid-template-columns: 1.08fr 0.92fr; gap: 36px; padding: 56px 0 76px; } }
+  .hero { padding: 40px 0 0; }
+  .hero-copy { max-width: 760px; }
 
   .badge {
     display: inline-flex; align-items: center; gap: 9px;
-    font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--accent-2);
-    background: rgba(255,138,61,.09);
-    border: 1px solid rgba(255,138,61,.35);
+    font-size: 12.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: #b8f5cf;
+    background: rgba(37,211,102,.1);
+    border: 1px solid rgba(37,211,102,.4);
     padding: 8px 16px; border-radius: 100px;
   }
-  .badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-1); animation: pulse 1.8s infinite; flex: none; }
-  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,106,44,.6); } 70% { box-shadow: 0 0 0 9px rgba(255,106,44,0); } 100% { box-shadow: 0 0 0 0 rgba(255,106,44,0); } }
+  .badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--whatsapp); animation: pulse 1.8s infinite; flex: none; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(37,211,102,.6); } 70% { box-shadow: 0 0 0 9px rgba(37,211,102,0); } 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); } }
 
-  .kicker-line { margin: 18px 0 6px; font-size: 13.5px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  .kicker-line { margin: 20px 0 8px; font-size: 13.5px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-2); }
 
-  h1 { font-size: clamp(46px, 8.4vw, 98px); line-height: 0.94; margin: 0; text-transform: uppercase; text-wrap: balance; }
+  h1 { font-size: clamp(40px, 7.2vw, 84px); line-height: 0.96; margin: 0; text-transform: uppercase; text-wrap: balance; }
   h1 .hl {
     background: var(--accent-grad);
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
 
-  .sub { font-size: 18px; color: var(--muted); max-width: 50ch; margin: 22px 0 30px; font-weight: 400; }
+  .sub { font-size: 18px; color: var(--muted); max-width: 52ch; margin: 22px auto 30px; font-weight: 400; }
 
   .cta {
     position: relative;
@@ -130,7 +137,7 @@
     color: #1a0800;
     font-size: 19px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.01em;
     text-decoration: none;
-    box-shadow: 0 0 0 0 rgba(255,106,44,0), 0 18px 40px -14px rgba(255,106,44,.65), 0 0 40px rgba(255,106,44,.25);
+    box-shadow: 0 18px 40px -14px rgba(255,106,44,.65), 0 0 40px rgba(255,106,44,.25);
     transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
   }
   .cta:hover { filter: brightness(1.06); transform: translateY(-2px); }
@@ -141,62 +148,92 @@
   .microcopy { margin: 14px 0 0; font-size: 14px; color: var(--muted-dim); font-weight: 500; }
   .microcopy b { color: var(--accent-2); font-weight: 700; }
 
-  /* ---------- hero photo ---------- */
-  .hero-photo { position: relative; max-width: 460px; margin: 0 auto; }
-  .hero-photo .frame {
-    position: relative; aspect-ratio: 1 / 1; overflow: hidden;
-    border-radius: 28px; border: 1px solid var(--line-strong);
-    box-shadow: 0 30px 70px -30px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.02);
+  /* ---------- hero video ---------- */
+  .hero-video { position: relative; max-width: 900px; margin: 46px auto 0; }
+  .hero-video .frame {
+    position: relative; aspect-ratio: 16 / 10; overflow: hidden;
+    border-radius: 24px; border: 1px solid var(--line-strong);
+    box-shadow: 0 40px 90px -30px rgba(0,0,0,.75), 0 0 60px rgba(255,106,44,.12);
   }
-  .hero-photo img { width: 100%; height: 100%; object-fit: cover; filter: saturate(1.08) contrast(1.03); }
-  .hero-photo .fade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,7,12,0) 40%, rgba(5,7,12,.75) 100%); }
+  .hero-video video { width: 100%; height: 100%; object-fit: cover; filter: saturate(1.1) contrast(1.05) brightness(0.96); }
+  .hero-video .fade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,7,12,0) 55%, rgba(5,7,12,.8) 100%); }
+  .hero-video .fade-side { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5,7,12,.35), transparent 30%, transparent 70%, rgba(5,7,12,.35)); }
 
   .stat-widget {
-    position: absolute; left: -18px; bottom: -22px;
-    width: 178px;
-    background: rgba(12,17,27,.9);
+    position: absolute; left: 18px; bottom: 18px;
+    width: 168px;
+    background: rgba(12,17,27,.85);
     -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
     border: 1px solid var(--line-strong);
     border-radius: 16px;
-    padding: 14px 16px;
+    padding: 13px 15px;
     box-shadow: 0 20px 40px -18px rgba(0,0,0,.7);
   }
-  .stat-widget .label { display: flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-  .stat-widget .label .rec { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-1); animation: pulse 1.8s infinite; }
-  .stat-widget .big { font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-size: 40px; line-height: 1; color: var(--ink); }
-  .stat-widget .big span { font-size: 18px; color: var(--accent-2); }
-  .stat-widget .row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 12px; color: var(--muted); font-weight: 600; }
-  .stat-widget .bar { margin-top: 8px; height: 4px; border-radius: 4px; background: rgba(255,255,255,.08); overflow: hidden; }
+  .stat-widget .label { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .stat-widget .label .rec { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-1); animation: pulse2 1.8s infinite; }
+  @keyframes pulse2 { 0% { box-shadow: 0 0 0 0 rgba(255,106,44,.6); } 70% { box-shadow: 0 0 0 8px rgba(255,106,44,0); } 100% { box-shadow: 0 0 0 0 rgba(255,106,44,0); } }
+  .stat-widget .big { font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-size: 34px; line-height: 1; color: var(--ink); }
+  .stat-widget .big span { font-size: 16px; color: var(--accent-2); }
+  .stat-widget .row { display: flex; justify-content: space-between; align-items: center; margin-top: 7px; font-size: 11.5px; color: var(--muted); font-weight: 600; }
+  .stat-widget .bar { margin-top: 7px; height: 4px; border-radius: 4px; background: rgba(255,255,255,.08); overflow: hidden; }
   .stat-widget .bar i { display: block; height: 100%; width: 78%; background: var(--accent-grad); }
 
+  .free-strip {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 22px;
+    margin: 20px auto 0; font-size: 13.5px; color: var(--muted); font-weight: 600;
+  }
+  .free-strip span { display: inline-flex; align-items: center; gap: 6px; }
+  .free-strip svg { width: 15px; height: 15px; color: var(--whatsapp); flex: none; }
+
   /* ---------- section head ---------- */
-  .section-head { max-width: 64ch; margin: 0 0 32px; }
+  .section-head { max-width: 60ch; margin: 0 auto 34px; text-align: center; }
   .section-head .kicker { font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent-1); margin: 0 0 10px; }
-  .section-head h2 { font-size: clamp(28px, 4vw, 44px); margin: 0 0 10px; text-transform: uppercase; text-wrap: balance; line-height: 1; }
+  .section-head h2 { font-size: clamp(28px, 4vw, 42px); margin: 0 0 10px; text-transform: uppercase; text-wrap: balance; line-height: 1; }
   .section-head p { color: var(--muted); font-size: 16px; margin: 0; font-weight: 400; }
 
   /* ---------- benefit cards ---------- */
   .cards { display: grid; grid-template-columns: 1fr; gap: 12px; }
   @media (min-width: 620px) { .cards { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 960px) { .cards { grid-template-columns: repeat(3, 1fr); } }
-  .card { padding: 20px; background: var(--bg-panel-2); border: 1px solid rgba(255,138,61,.12); border-radius: 16px; }
+  .card { padding: 20px; background: var(--bg-panel-2); border: 1px solid rgba(255,138,61,.12); border-radius: 16px; text-align: left; }
   .card .emoji { font-size: 28px; margin-bottom: 12px; line-height: 1; }
   .card h3 { font-size: 17px; margin: 0 0 5px; font-weight: 700; font-family: "Barlow", sans-serif; letter-spacing: 0; text-transform: none; }
   .card p { font-size: 14px; color: var(--muted); margin: 0; line-height: 1.55; font-weight: 400; }
 
-  /* ---------- store strip ---------- */
-  .stores { display: flex; flex-wrap: wrap; gap: 10px; }
-  .store-pill {
-    padding: 10px 18px; border-radius: 100px;
-    background: var(--bg-panel-2); border: 1px solid var(--line);
-    font-size: 14px; font-weight: 600; color: var(--muted);
+  /* ---------- whatsapp preview ---------- */
+  .chat-mock {
+    max-width: 420px; margin: 0 auto;
+    background: var(--bg-panel-2); border: 1px solid var(--line-strong);
+    border-radius: 22px; padding: 18px 16px 20px;
+    box-shadow: 0 30px 70px -30px rgba(0,0,0,.7);
   }
+  .chat-mock .chat-head { display: flex; align-items: center; gap: 10px; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .chat-mock .chat-head .av { width: 34px; height: 34px; border-radius: 50%; background: var(--accent-grad); display: grid; place-items: center; font-size: 15px; }
+  .chat-mock .chat-head b { font-size: 14.5px; }
+  .chat-mock .chat-head span { display: block; font-size: 11.5px; color: var(--muted); }
+  .bubble {
+    background: #1f3327; border: 1px solid rgba(37,211,102,.18);
+    border-radius: 12px 12px 12px 2px;
+    padding: 10px 12px; font-size: 14px; color: #e7f7ec;
+    margin-bottom: 10px; max-width: 92%;
+  }
+  .bubble .time { display: block; text-align: right; font-size: 10.5px; color: #8fbf9e; margin-top: 4px; }
+  .example-tag {
+    display: inline-block; margin-bottom: 12px;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent-2); background: rgba(255,138,61,.1); border: 1px solid rgba(255,138,61,.3);
+    padding: 4px 10px; border-radius: 100px;
+  }
+
+  /* ---------- store strip ---------- */
+  .stores { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .store-pill { padding: 10px 18px; border-radius: 100px; background: var(--bg-panel-2); border: 1px solid var(--line); font-size: 14px; font-weight: 600; color: var(--muted); }
   .store-pill.plus { color: var(--accent-2); border-color: rgba(255,138,61,.3); }
 
   /* ---------- reasons (numbered) ---------- */
-  .reasons { display: grid; grid-template-columns: 1fr; gap: 0; }
+  .reasons { display: grid; grid-template-columns: 1fr; gap: 0; max-width: 880px; margin: 0 auto; }
   @media (min-width: 720px) { .reasons { grid-template-columns: repeat(2, 1fr); gap: 0 40px; } }
-  .reason { display: flex; gap: 18px; padding: 22px 0; border-top: 1px solid var(--line); }
+  .reason { display: flex; gap: 18px; padding: 22px 0; border-top: 1px solid var(--line); text-align: left; }
   .reason .num { font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-size: 32px; color: var(--accent-1); opacity: 0.55; flex: none; width: 48px; }
   .reason h3 { margin: 2px 0 5px; font-size: 17px; font-weight: 700; font-family: "Barlow", sans-serif; letter-spacing: 0; text-transform: none; }
   .reason p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.55; font-weight: 400; }
@@ -210,8 +247,8 @@
     border-radius: 26px;
   }
   .final-cta .kicker { font-size: 13px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-1); margin: 0 0 10px; }
-  .final-cta h2 { font-size: clamp(30px, 5.5vw, 58px); margin: 0 0 14px; line-height: 0.96; text-transform: uppercase; text-wrap: balance; }
-  .final-cta p { color: var(--muted); font-size: 16.5px; margin: 0 0 28px; font-weight: 400; }
+  .final-cta h2 { font-size: clamp(30px, 5.5vw, 56px); margin: 0 0 14px; line-height: 0.96; text-transform: uppercase; text-wrap: balance; }
+  .final-cta p { color: var(--muted); font-size: 16.5px; margin: 0 auto 28px; max-width: 46ch; font-weight: 400; }
 
   footer { position: relative; z-index: 1; margin: 44px auto 0; padding: 26px 22px 0; font-size: 12px; color: var(--muted-dim); text-align: center; font-weight: 400; }
   footer a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
@@ -248,24 +285,32 @@
   </div>
 
   <section class="hero">
-    <div>
-      <span class="badge"><span class="dot"></span>Grupo fechado · vagas limitadas</span>
-      <p class="kicker-line">Só achados de impressão 3D</p>
+    <div class="hero-copy center">
+      <span class="badge"><span class="dot"></span>100% grátis · vagas limitadas</span>
+      <p class="kicker-line">Grupo grátis no WhatsApp</p>
 
-      <h1>Achados 3D<br><span class="hl">Bora printar!</span></h1>
+      <h1>Promoções de<br><span class="hl">Impressão 3D</span></h1>
 
       <p class="sub">Filamento, impressoras, peças e upgrades com desconto — garimpados todo dia e enviados no grupo assim que a oferta sai, antes que o cupom acabe.</p>
 
       <a class="cta" id="cta-main" href="https://chat.whatsapp.com/LCn6wQS7b0a90ITmtV5JrR?s=cl&amp;p=i&amp;ilr=0&amp;amv=0" target="_blank" rel="noopener noreferrer">
         <svg class="wa" viewBox="0 0 32 32" fill="currentColor"><path d="M16.04 3C9.37 3 3.98 8.34 3.98 14.94c0 2.17.58 4.28 1.68 6.15L3 29l8.15-2.6a13.1 13.1 0 0 0 4.89.94h.01c6.67 0 12.06-5.34 12.06-11.94C28.11 8.8 22.72 3 16.04 3zm7.1 17.02c-.3.83-1.7 1.6-2.35 1.7-.6.09-1.36.13-2.19-.14-.5-.16-1.15-.37-1.98-.72-3.5-1.5-5.78-4.99-5.96-5.22-.17-.23-1.42-1.87-1.42-3.57 0-1.7.9-2.53 1.22-2.88.31-.34.68-.43.91-.43.23 0 .46 0 .66.01.21.01.5-.08.78.6.3.71 1 2.45 1.09 2.62.09.18.15.39.03.63-.12.23-.18.38-.36.58-.18.2-.38.45-.54.6-.18.18-.37.37-.16.72.21.35.93 1.52 1.99 2.46 1.37 1.21 2.52 1.59 2.87 1.77.35.18.56.15.76-.09.21-.24.88-1.02 1.11-1.37.24-.35.47-.29.79-.17.32.12 2.05.96 2.4 1.14.35.18.58.26.67.41.09.15.09.85-.21 1.68z"/></svg>
-        <span>Entrar no grupo</span>
+        <span>Entrar grátis no grupo</span>
       </a>
-      <p class="microcopy"><b>Vagas limitadas!</b> Já garante a tua.</p>
+
+      <div class="free-strip">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>100% gratuito</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>Só promoções</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>Saia quando quiser</span>
+      </div>
     </div>
 
-    <div class="hero-photo">
+    <div class="hero-video reveal">
       <div class="frame">
-        <img src="https://images.unsplash.com/photo-1758387933125-5ac945b4e2cd?fm=jpg&amp;q=70&amp;w=900&amp;auto=format&amp;fit=crop" alt="Impressora 3D imprimindo com iluminação neon" loading="eager" />
+        <video autoplay muted loop playsinline preload="auto" poster="https://images.unsplash.com/photo-1758387933125-5ac945b4e2cd?fm=jpg&amp;q=60&amp;w=1200&amp;auto=format&amp;fit=crop">
+          <source src="https://videos.pexels.com/video-files/27596569/12180242_1920_1080_25fps.mp4" type="video/mp4">
+        </video>
+        <div class="fade-side" aria-hidden="true"></div>
         <div class="fade" aria-hidden="true"></div>
       </div>
       <div class="stat-widget" aria-hidden="true">
@@ -278,12 +323,12 @@
   </section>
 
   <section>
-    <div class="section-head">
+    <div class="section-head reveal">
       <p class="kicker">o que você recebe</p>
       <h2>Ofertas que realmente valem</h2>
       <p>Achados de cupons e promoções direto no WhatsApp — sem post patrocinado escondido.</p>
     </div>
-    <div class="cards">
+    <div class="cards reveal">
       <div class="card"><div class="emoji">🧵</div><h3>Filamento barato</h3><p>PLA, PETG, ABS e mais com desconto real.</p></div>
       <div class="card"><div class="emoji">🖨️</div><h3>Impressoras & kits</h3><p>Ofertas em impressoras completas e kits de montagem.</p></div>
       <div class="card"><div class="emoji">🔧</div><h3>Peças & upgrades</h3><p>Bicos, hotends, correias, fontes e sensores.</p></div>
@@ -294,11 +339,29 @@
   </section>
 
   <section>
-    <div class="section-head">
+    <div class="section-head reveal">
+      <p class="kicker">veja como chega</p>
+      <h2>Direto no seu WhatsApp, sem enrolação</h2>
+      <p>Assim que a promoção sai, o alerta cai no grupo — curto e com o link.</p>
+    </div>
+    <div class="chat-mock reveal">
+      <span class="example-tag">Exemplo de mensagem</span>
+      <div class="chat-head">
+        <div class="av">🖨️</div>
+        <div><b>Achados 3D</b><span>grupo · você e outros participantes</span></div>
+      </div>
+      <div class="bubble">🧵 Achado do dia: filamento PLA com cupom extra na Shopee 👉 <u>link no grupo</u><span class="time">09:14 ✓✓</span></div>
+      <div class="bubble">⚡ Promoção relâmpago: impressora com o preço mais baixo do mês 👉 <u>link no grupo</u><span class="time">13:02 ✓✓</span></div>
+      <div class="bubble">🔧 Kit de bicos + hotend com frete grátis 👉 <u>link no grupo</u><span class="time">18:47 ✓✓</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head reveal">
       <p class="kicker">onde monitoro</p>
       <h2>Múltiplas lojas. Um grupo.</h2>
     </div>
-    <div class="stores">
+    <div class="stores reveal">
       <span class="store-pill">Amazon</span>
       <span class="store-pill">Shopee</span>
       <span class="store-pill">AliExpress</span>
@@ -310,11 +373,11 @@
   </section>
 
   <section>
-    <div class="section-head">
+    <div class="section-head reveal">
       <p class="kicker">por que entrar agora</p>
       <h2>Achados somem rápido. Quem tá no grupo, aproveita.</h2>
     </div>
-    <div class="reasons">
+    <div class="reasons reveal">
       <div class="reason"><div class="num">01</div><div><h3>Só o admin fala</h3><p>Sem spam, sem bagunça. Apenas ofertas selecionadas direto pra você.</p></div></div>
       <div class="reason"><div class="num">02</div><div><h3>Grupo com vagas limitadas</h3><p>O WhatsApp limita o tamanho de cada grupo — quando encher, não dá pra entrar.</p></div></div>
       <div class="reason"><div class="num">03</div><div><h3>Estoque de promoção é curto</h3><p>Cupom bom e estoque baixo somem em minutos, não em dias.</p></div></div>
@@ -323,9 +386,9 @@
   </section>
 
   <section>
-    <div class="final-cta">
+    <div class="final-cta reveal">
       <p class="kicker">vagas se esgotando</p>
-      <h2>Não fica de fora.<br>Bora printar!</h2>
+      <h2>Não fica de fora.<br>Entra grátis!</h2>
       <p>Cada dia fora do grupo é uma promoção que você perdeu. Entra agora, antes que feche.</p>
       <a class="cta" id="cta-final" href="https://chat.whatsapp.com/LCn6wQS7b0a90ITmtV5JrR?s=cl&amp;p=i&amp;ilr=0&amp;amv=0" target="_blank" rel="noopener noreferrer">
         <svg class="wa" viewBox="0 0 32 32" fill="currentColor"><path d="M16.04 3C9.37 3 3.98 8.34 3.98 14.94c0 2.17.58 4.28 1.68 6.15L3 29l8.15-2.6a13.1 13.1 0 0 0 4.89.94h.01c6.67 0 12.06-5.34 12.06-11.94C28.11 8.8 22.72 3 16.04 3zm7.1 17.02c-.3.83-1.7 1.6-2.35 1.7-.6.09-1.36.13-2.19-.14-.5-.16-1.15-.37-1.98-.72-3.5-1.5-5.78-4.99-5.96-5.22-.17-.23-1.42-1.87-1.42-3.57 0-1.7.9-2.53 1.22-2.88.31-.34.68-.43.91-.43.23 0 .46 0 .66.01.21.01.5-.08.78.6.3.71 1 2.45 1.09 2.62.09.18.15.39.03.63-.12.23-.18.38-.36.58-.18.2-.38.45-.54.6-.18.18-.37.37-.16.72.21.35.93 1.52 1.99 2.46 1.37 1.21 2.52 1.59 2.87 1.77.35.18.56.15.76-.09.21-.24.88-1.02 1.11-1.37.24-.35.47-.29.79-.17.32.12 2.05.96 2.4 1.14.35.18.58.26.67.41.09.15.09.85-.21 1.68z"/></svg>
@@ -344,17 +407,18 @@
   <div class="inner">
     <a class="cta" id="cta-sticky" href="https://chat.whatsapp.com/LCn6wQS7b0a90ITmtV5JrR?s=cl&amp;p=i&amp;ilr=0&amp;amv=0" target="_blank" rel="noopener noreferrer">
       <svg class="wa" viewBox="0 0 32 32" fill="currentColor"><path d="M16.04 3C9.37 3 3.98 8.34 3.98 14.94c0 2.17.58 4.28 1.68 6.15L3 29l8.15-2.6a13.1 13.1 0 0 0 4.89.94h.01c6.67 0 12.06-5.34 12.06-11.94C28.11 8.8 22.72 3 16.04 3zm7.1 17.02c-.3.83-1.7 1.6-2.35 1.7-.6.09-1.36.13-2.19-.14-.5-.16-1.15-.37-1.98-.72-3.5-1.5-5.78-4.99-5.96-5.22-.17-.23-1.42-1.87-1.42-3.57 0-1.7.9-2.53 1.22-2.88.31-.34.68-.43.91-.43.23 0 .46 0 .66.01.21.01.5-.08.78.6.3.71 1 2.45 1.09 2.62.09.18.15.39.03.63-.12.23-.18.38-.36.58-.18.2-.38.45-.54.6-.18.18-.37.37-.16.72.21.35.93 1.52 1.99 2.46 1.37 1.21 2.52 1.59 2.87 1.77.35.18.56.15.76-.09.21-.24.88-1.02 1.11-1.37.24-.35.47-.29.79-.17.32.12 2.05.96 2.4 1.14.35.18.58.26.67.41.09.15.09.85-.21 1.68z"/></svg>
-      <span>Entrar no grupo</span>
+      <span>Entrar grátis no grupo</span>
     </a>
   </div>
 </div>
 
 <script>
+  // Animated background: drifting grid + rising embers
   (function () {
     var canvas = document.getElementById('bed');
     var ctx = canvas.getContext('2d');
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var w, h, dpr;
+    var w, h, dpr, step;
 
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -362,20 +426,76 @@
       h = canvas.height = window.innerHeight * dpr;
       canvas.style.width = window.innerWidth + 'px';
       canvas.style.height = window.innerHeight + 'px';
+      step = 46 * dpr;
     }
     window.addEventListener('resize', resize);
     resize();
 
-    var step = 44 * dpr;
-
-    function drawGrid() {
-      ctx.clearRect(0, 0, w, h);
-      ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-      ctx.lineWidth = 1;
-      for (var x = 0; x < w; x += step) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
-      for (var y = 0; y < h; y += step) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+    var embers = [];
+    var EMBER_COUNT = 26;
+    function spawnEmber(atBottom) {
+      return {
+        x: Math.random() * w,
+        y: atBottom ? h + Math.random() * 80 : Math.random() * h,
+        r: (1 + Math.random() * 2.4) * dpr,
+        speed: (0.25 + Math.random() * 0.55) * dpr,
+        drift: (Math.random() - 0.5) * 0.3 * dpr,
+        alpha: 0.25 + Math.random() * 0.5
+      };
     }
-    drawGrid();
+    for (var i = 0; i < EMBER_COUNT; i++) embers.push(spawnEmber(false));
+
+    var t = 0;
+    function frame() {
+      t += 1;
+      ctx.clearRect(0, 0, w, h);
+
+      var offset = (t * 0.15 * dpr) % step;
+      ctx.strokeStyle = 'rgba(255,255,255,0.035)';
+      ctx.lineWidth = 1;
+      for (var x = -offset; x < w; x += step) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+      for (var y = -offset; y < h; y += step) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+
+      for (var j = 0; j < embers.length; j++) {
+        var e = embers[j];
+        e.y -= e.speed;
+        e.x += e.drift;
+        var fade = Math.min(1, e.y / (h * 0.25));
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(255,138,61,' + (e.alpha * fade) + ')';
+        ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+        ctx.fill();
+        if (e.y < -20) embers[j] = spawnEmber(true);
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    if (reduceMotion) {
+      ctx.strokeStyle = 'rgba(255,255,255,0.035)';
+      for (var x2 = 0; x2 < w; x2 += step) { ctx.beginPath(); ctx.moveTo(x2, 0); ctx.lineTo(x2, h); ctx.stroke(); }
+      for (var y2 = 0; y2 < h; y2 += step) { ctx.beginPath(); ctx.moveTo(0, y2); ctx.lineTo(w, y2); ctx.stroke(); }
+    } else {
+      requestAnimationFrame(frame);
+    }
+  })();
+
+  // Scroll reveal
+  (function () {
+    var els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('is-visible'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function (el) { io.observe(el); });
   })();
 
   // Conversion tracking: fires only if a pixel is present on the page.
