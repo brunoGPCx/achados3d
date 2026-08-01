@@ -1,16 +1,20 @@
 <!-- @dsCard group="Landing" -->
-<title>Achadinhos de Impressão 3D — Grupo grátis no WhatsApp</title>
+<title>Achados 3D — Grupo grátis no WhatsApp</title>
 <meta name="description" content="Entre no grupo grátis e receba na hora os melhores achados de impressão 3D: filamento, impressoras, peças e upgrades em promoção — antes que a oferta acabe." />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="theme-color" content="#0a0e13" />
+<meta name="theme-color" content="#05070c" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Achadinhos de Impressão 3D — Grupo grátis no WhatsApp" />
-<meta property="og:description" content="Filamento, impressoras e peças com desconto, garimpados todo dia. Entre grátis, sem spam." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Achados 3D — Grupo grátis no WhatsApp" />
+<meta property="og:description" content="Filamento, impressoras e peças com desconto, garimpados todo dia. Grupo com vagas limitadas — entra antes que feche." />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <!--
   TRACKING (opcional): cole seus IDs abaixo para medir conversão do tráfego pago.
-  O clique no botão já dispara os eventos automaticamente quando os pixels existirem.
+  O clique nos botões já dispara os eventos automaticamente quando os pixels existirem.
 
   Meta Pixel:
   <script>
@@ -31,393 +35,197 @@
 
 <style>
   :root {
-    --bg: #0a0e13;
-    --bg-panel: #10161f;
-    --bg-panel-2: #141c27;
-    --bg-panel-3: #182130;
-    --ink: #eef2f6;
-    --muted: #8b9baf;
-    --muted-dim: #64768a;
-    --accent: #ff8a3d;
-    --accent-soft: #ffbb7a;
-    --accent-dim: #c96a2c;
-    --urgent: #ff5f6d;
+    --bg: #05070c;
+    --bg-panel: #0c111b;
+    --bg-panel-2: #111827;
+    --ink: #f3f6fa;
+    --muted: #93a3b8;
+    --muted-dim: #62728a;
+    --accent-1: #ff6a2c;
+    --accent-2: #ffb648;
+    --accent-grad: linear-gradient(135deg, #ff5a1f, #ff8a3d, #ffb648);
     --whatsapp: #25d366;
-    --whatsapp-dark: #1da851;
     --line: rgba(255, 255, 255, 0.08);
-    --line-strong: rgba(255, 255, 255, 0.16);
+    --line-strong: rgba(255, 138, 61, 0.18);
   }
 
   * { box-sizing: border-box; }
 
-  html, body {
-    margin: 0;
-    padding: 0;
-    background: var(--bg);
-    color: var(--ink);
-    min-height: 100%;
-  }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); min-height: 100%; }
 
   body {
-    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-family: "Barlow", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     line-height: 1.5;
     overflow-x: hidden;
-    padding-bottom: 88px;
+    padding-bottom: 92px;
   }
 
   a { color: inherit; }
   img, svg { display: block; max-width: 100%; }
-
   section { position: relative; z-index: 1; }
 
-  .wrap {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 0 22px;
+  h1, h2, .display {
+    font-family: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.02em;
   }
 
-  /* ---------- background canvas ---------- */
-  #bed {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    opacity: 0.5;
-  }
-  .glow {
-    position: fixed;
-    z-index: 0;
-    border-radius: 50%;
-    filter: blur(100px);
-    pointer-events: none;
-  }
-  .glow--top {
-    top: -260px;
-    left: 55%;
-    transform: translateX(-50%);
-    width: 760px;
-    height: 480px;
-    background: radial-gradient(closest-side, rgba(255, 138, 61, 0.26), transparent 70%);
-  }
-  .glow--bottom {
-    bottom: -280px;
-    left: -160px;
-    width: 620px;
-    height: 520px;
-    background: radial-gradient(closest-side, rgba(37, 211, 102, 0.14), transparent 70%);
-  }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 22px; }
+
+  #bed { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.4; }
+  .glow { position: fixed; z-index: 0; border-radius: 50%; filter: blur(110px); pointer-events: none; }
+  .glow--top { top: -260px; left: 60%; transform: translateX(-50%); width: 820px; height: 520px; background: radial-gradient(closest-side, rgba(255,106,44,.3), transparent 70%); }
+  .glow--bottom { bottom: -300px; left: -180px; width: 640px; height: 540px; background: radial-gradient(closest-side, rgba(255,182,72,.14), transparent 70%); }
 
   /* ---------- top bar ---------- */
-  .topbar {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 22px 0 0;
-  }
-  .topbar .brandmark {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .topbar .mark {
-    width: 36px;
-    height: 36px;
-    flex: none;
-    display: grid;
-    place-items: center;
-    background: var(--bg-panel-2);
-    border: 1px solid var(--line-strong);
-    clip-path: polygon(18% 0, 100% 0, 100% 82%, 82% 100%, 0 100%, 0 18%);
-  }
-  .topbar .mark svg { width: 19px; height: 19px; }
-  .topbar .brand-name {
-    font-size: 13.5px;
-    letter-spacing: 0.02em;
-    color: var(--muted);
-  }
+  .topbar { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 22px 0 0; }
+  .topbar .brandmark { display: flex; align-items: center; gap: 10px; }
+  .topbar .mark { width: 38px; height: 38px; flex: none; display: grid; place-items: center; background: var(--bg-panel-2); border: 1px solid var(--line-strong); border-radius: 10px; }
+  .topbar .mark svg { width: 20px; height: 20px; }
+  .topbar .brand-name { font-size: 14px; letter-spacing: 0.02em; color: var(--muted); font-weight: 500; }
   .topbar .brand-name strong { color: var(--ink); font-weight: 700; }
-  .topbar .cta-mini {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 9px 15px;
-    background: var(--whatsapp);
-    color: #06210f;
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: none;
-    clip-path: polygon(9px 0, 100% 0, 100% 100%, 0 100%, 0 9px);
+  .btn-mini {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 10px 18px; border-radius: 100px;
+    background: var(--accent-grad); color: #1a0800;
+    font-size: 13.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em;
+    text-decoration: none; box-shadow: 0 0 24px rgba(255,106,44,.35);
   }
-  .topbar .cta-mini svg { width: 15px; height: 15px; }
-  @media (max-width: 640px) { .topbar .cta-mini { display: none; } }
+  .btn-mini svg { width: 15px; height: 15px; }
+  @media (max-width: 640px) { .btn-mini { display: none; } }
 
   /* ---------- hero ---------- */
-  .hero {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 40px;
-    align-items: center;
-    padding: 40px 0 56px;
+  .hero { display: grid; grid-template-columns: 1fr; gap: 44px; align-items: center; padding: 36px 0 56px; }
+  @media (min-width: 960px) { .hero { grid-template-columns: 1.08fr 0.92fr; gap: 36px; padding: 56px 0 76px; } }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent-2);
+    background: rgba(255,138,61,.09);
+    border: 1px solid rgba(255,138,61,.35);
+    padding: 8px 16px; border-radius: 100px;
   }
-  @media (min-width: 900px) {
-    .hero { grid-template-columns: 1.05fr 0.95fr; gap: 24px; padding: 64px 0 84px; }
+  .badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-1); animation: pulse 1.8s infinite; flex: none; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,106,44,.6); } 70% { box-shadow: 0 0 0 9px rgba(255,106,44,0); } 100% { box-shadow: 0 0 0 0 rgba(255,106,44,0); } }
+
+  .kicker-line { margin: 18px 0 6px; font-size: 13.5px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+
+  h1 { font-size: clamp(46px, 8.4vw, 98px); line-height: 0.94; margin: 0; text-transform: uppercase; text-wrap: balance; }
+  h1 .hl {
+    background: var(--accent-grad);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
   }
 
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: ui-monospace, "Cascadia Mono", "Consolas", monospace;
-    font-size: 11.5px;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
-    color: var(--whatsapp);
-    background: rgba(37, 211, 102, 0.08);
-    border: 1px solid rgba(37, 211, 102, 0.3);
-    padding: 6px 12px 6px 10px;
-    clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
-  }
-  .eyebrow .dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--whatsapp);
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(37,211,102,.55); }
-    70% { box-shadow: 0 0 0 8px rgba(37,211,102,0); }
-    100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
-  }
+  .sub { font-size: 18px; color: var(--muted); max-width: 50ch; margin: 22px 0 30px; font-weight: 400; }
 
-  h1 {
-    font-size: clamp(32px, 4.6vw, 52px);
-    line-height: 1.08;
-    letter-spacing: -0.015em;
-    font-weight: 780;
-    margin: 20px 0 0;
-    text-wrap: balance;
-  }
-  h1 em {
-    font-style: normal;
-    background: linear-gradient(100deg, var(--accent) 10%, var(--accent-soft) 55%, var(--accent) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .layer-line {
-    width: 84px; height: 3px; margin: 20px 0;
-    background: var(--accent);
-    transform-origin: left;
-    animation: draw 900ms 300ms cubic-bezier(.65,0,.35,1) both;
-  }
-  @keyframes draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-
-  .sub {
-    font-size: 17.5px;
-    color: var(--muted);
-    max-width: 52ch;
-    margin: 0 0 30px;
-  }
-
-  /* ---------- CTA button ---------- */
   .cta {
     position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 11px;
     width: 100%;
-    padding: 19px 22px;
-    background: linear-gradient(180deg, var(--whatsapp), var(--whatsapp-dark));
-    color: #06210f;
-    font-size: 17px;
-    font-weight: 750;
-    letter-spacing: -0.01em;
+    padding: 20px 30px;
+    border-radius: 100px;
+    background: var(--accent-grad);
+    color: #1a0800;
+    font-size: 19px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.01em;
     text-decoration: none;
-    clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
-    box-shadow: 0 16px 38px -14px rgba(37, 211, 102, 0.6);
+    box-shadow: 0 0 0 0 rgba(255,106,44,0), 0 18px 40px -14px rgba(255,106,44,.65), 0 0 40px rgba(255,106,44,.25);
     transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
   }
-  .cta:hover { filter: brightness(1.05); transform: translateY(-1px); }
+  .cta:hover { filter: brightness(1.06); transform: translateY(-2px); }
   .cta:active { transform: translateY(0); }
-  .cta svg.wa { width: 22px; height: 22px; flex: none; }
-  .cta .arrow { transition: transform 160ms ease; }
-  .cta:hover .arrow { transform: translateX(3px); }
-  @media (min-width: 480px) { .cta { width: auto; padding-left: 30px; padding-right: 30px; } }
+  .cta svg.wa { width: 24px; height: 24px; flex: none; }
+  @media (min-width: 480px) { .cta { width: auto; padding-left: 38px; padding-right: 38px; } }
 
-  .trust-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 18px;
-    margin: 16px 0 0;
-    font-size: 13px;
-    color: var(--muted);
-  }
-  .trust-row span { display: inline-flex; align-items: center; gap: 6px; }
-  .trust-row svg { width: 14px; height: 14px; color: var(--whatsapp); flex: none; }
+  .microcopy { margin: 14px 0 0; font-size: 14px; color: var(--muted-dim); font-weight: 500; }
+  .microcopy b { color: var(--accent-2); font-weight: 700; }
 
-  /* ---------- hero illustration ---------- */
-  .hero-art {
-    position: relative;
-    aspect-ratio: 1 / 1;
-    max-width: 460px;
-    margin: 0 auto;
+  /* ---------- hero photo ---------- */
+  .hero-photo { position: relative; max-width: 460px; margin: 0 auto; }
+  .hero-photo .frame {
+    position: relative; aspect-ratio: 1 / 1; overflow: hidden;
+    border-radius: 28px; border: 1px solid var(--line-strong);
+    box-shadow: 0 30px 70px -30px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.02);
   }
-  .hero-art .ring {
-    position: absolute; inset: 0;
-    border: 1px dashed var(--line-strong);
-    border-radius: 50%;
-  }
-  .hero-art .ring--inner { inset: 12%; border-color: var(--line); }
-  .hero-art .float {
-    position: absolute;
-    padding: 8px;
-    background: var(--bg-panel-2);
+  .hero-photo img { width: 100%; height: 100%; object-fit: cover; filter: saturate(1.08) contrast(1.03); }
+  .hero-photo .fade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,7,12,0) 40%, rgba(5,7,12,.75) 100%); }
+
+  .stat-widget {
+    position: absolute; left: -18px; bottom: -22px;
+    width: 178px;
+    background: rgba(12,17,27,.9);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
     border: 1px solid var(--line-strong);
-    clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
-    box-shadow: 0 10px 26px -12px rgba(0,0,0,.5);
+    border-radius: 16px;
+    padding: 14px 16px;
+    box-shadow: 0 20px 40px -18px rgba(0,0,0,.7);
   }
-  .hero-art .float svg { width: 22px; height: 22px; }
-  .hero-art .float--1 { top: 4%; right: 8%; color: var(--accent); animation: bob 5s ease-in-out infinite; }
-  .hero-art .float--2 { bottom: 10%; left: 0%; color: var(--whatsapp); animation: bob 6s ease-in-out infinite 0.4s; }
-  .hero-art .float--3 { top: 46%; right: -4%; color: var(--accent-soft); animation: bob 5.5s ease-in-out infinite 0.8s; }
-  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .stat-widget .label { display: flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .stat-widget .label .rec { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-1); animation: pulse 1.8s infinite; }
+  .stat-widget .big { font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-size: 40px; line-height: 1; color: var(--ink); }
+  .stat-widget .big span { font-size: 18px; color: var(--accent-2); }
+  .stat-widget .row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .stat-widget .bar { margin-top: 8px; height: 4px; border-radius: 4px; background: rgba(255,255,255,.08); overflow: hidden; }
+  .stat-widget .bar i { display: block; height: 100%; width: 78%; background: var(--accent-grad); }
+
+  /* ---------- section head ---------- */
+  .section-head { max-width: 64ch; margin: 0 0 32px; }
+  .section-head .kicker { font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent-1); margin: 0 0 10px; }
+  .section-head h2 { font-size: clamp(28px, 4vw, 44px); margin: 0 0 10px; text-transform: uppercase; text-wrap: balance; line-height: 1; }
+  .section-head p { color: var(--muted); font-size: 16px; margin: 0; font-weight: 400; }
 
   /* ---------- benefit cards ---------- */
-  .section-head { max-width: 62ch; margin: 0 0 34px; }
-  .section-head .kicker {
-    font-family: ui-monospace, "Cascadia Mono", "Consolas", monospace;
-    font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--accent); margin: 0 0 10px;
-  }
-  .section-head h2 { font-size: clamp(24px, 3vw, 32px); margin: 0 0 10px; font-weight: 720; letter-spacing: -0.01em; text-wrap: balance; }
-  .section-head p { color: var(--muted); font-size: 15.5px; margin: 0; }
+  .cards { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 620px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 960px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+  .card { padding: 20px; background: var(--bg-panel-2); border: 1px solid rgba(255,138,61,.12); border-radius: 16px; }
+  .card .emoji { font-size: 28px; margin-bottom: 12px; line-height: 1; }
+  .card h3 { font-size: 17px; margin: 0 0 5px; font-weight: 700; font-family: "Barlow", sans-serif; letter-spacing: 0; text-transform: none; }
+  .card p { font-size: 14px; color: var(--muted); margin: 0; line-height: 1.55; font-weight: 400; }
 
-  .cards {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 14px;
+  /* ---------- store strip ---------- */
+  .stores { display: flex; flex-wrap: wrap; gap: 10px; }
+  .store-pill {
+    padding: 10px 18px; border-radius: 100px;
+    background: var(--bg-panel-2); border: 1px solid var(--line);
+    font-size: 14px; font-weight: 600; color: var(--muted);
   }
-  @media (min-width: 720px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+  .store-pill.plus { color: var(--accent-2); border-color: rgba(255,138,61,.3); }
 
-  .card {
-    padding: 24px 20px;
-    background: var(--bg-panel);
-    border: 1px solid var(--line);
-    clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
-  }
-  .card .ic {
-    width: 46px; height: 46px;
-    display: grid; place-items: center;
-    margin-bottom: 16px;
-    background: rgba(255,138,61,.1);
-    border: 1px solid rgba(255,138,61,.25);
-    clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
-  }
-  .card .ic svg { width: 22px; height: 22px; color: var(--accent); }
-  .card h3 { font-size: 16.5px; margin: 0 0 6px; font-weight: 680; }
-  .card p { font-size: 14px; color: var(--muted); margin: 0; line-height: 1.55; }
-
-  /* ---------- how it works ---------- */
-  .steps {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
-    counter-reset: step;
-  }
-  @media (min-width: 720px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 18px; } }
-  .step {
-    position: relative;
-    padding: 22px 0 22px 52px;
-    border-top: 1px solid var(--line);
-  }
-  @media (min-width: 720px) {
-    .step { border-top: none; padding: 0 0 0 52px; }
-  }
-  .step .num {
-    position: absolute; left: 0; top: 22px;
-    width: 36px; height: 36px;
-    display: grid; place-items: center;
-    background: var(--bg-panel-2);
-    border: 1px solid var(--line-strong);
-    color: var(--accent);
-    font-weight: 750; font-size: 15px;
-    clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
-  }
-  @media (min-width: 720px) { .step .num { top: 0; } }
-  .step h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 680; }
-  .step p { margin: 0; font-size: 13.5px; color: var(--muted); }
-
-  /* ---------- urgency strip ---------- */
-  .urgency {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 22px 24px;
-    background: linear-gradient(135deg, rgba(255,95,109,.08), rgba(255,138,61,.06));
-    border: 1px solid rgba(255,95,109,.25);
-    clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
-  }
-  .urgency .ic {
-    flex: none; width: 42px; height: 42px;
-    display: grid; place-items: center;
-    background: rgba(255,95,109,.14);
-    border: 1px solid rgba(255,95,109,.35);
-    border-radius: 50%;
-  }
-  .urgency .ic svg { width: 20px; height: 20px; color: var(--urgent); }
-  .urgency p { margin: 0; font-size: 15px; color: var(--ink); }
-  .urgency b { color: var(--urgent); }
-  @media (max-width: 560px) { .urgency { flex-direction: column; text-align: center; } }
+  /* ---------- reasons (numbered) ---------- */
+  .reasons { display: grid; grid-template-columns: 1fr; gap: 0; }
+  @media (min-width: 720px) { .reasons { grid-template-columns: repeat(2, 1fr); gap: 0 40px; } }
+  .reason { display: flex; gap: 18px; padding: 22px 0; border-top: 1px solid var(--line); }
+  .reason .num { font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-size: 32px; color: var(--accent-1); opacity: 0.55; flex: none; width: 48px; }
+  .reason h3 { margin: 2px 0 5px; font-size: 17px; font-weight: 700; font-family: "Barlow", sans-serif; letter-spacing: 0; text-transform: none; }
+  .reason p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.55; font-weight: 400; }
 
   /* ---------- final CTA ---------- */
   .final-cta {
     text-align: center;
-    padding: 56px 24px;
-    background: var(--bg-panel);
+    padding: 60px 24px;
+    background: radial-gradient(120% 140% at 50% 0%, rgba(255,106,44,.12), transparent 60%), var(--bg-panel);
     border: 1px solid var(--line-strong);
-    clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+    border-radius: 26px;
   }
-  .final-cta h2 { font-size: clamp(24px, 3.4vw, 34px); margin: 0 0 12px; font-weight: 760; letter-spacing: -0.01em; text-wrap: balance; }
-  .final-cta p { color: var(--muted); font-size: 16px; margin: 0 0 26px; }
-  .final-cta .cta { padding-left: 34px; padding-right: 34px; }
+  .final-cta .kicker { font-size: 13px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-1); margin: 0 0 10px; }
+  .final-cta h2 { font-size: clamp(30px, 5.5vw, 58px); margin: 0 0 14px; line-height: 0.96; text-transform: uppercase; text-wrap: balance; }
+  .final-cta p { color: var(--muted); font-size: 16.5px; margin: 0 0 28px; font-weight: 400; }
 
-  footer {
-    position: relative; z-index: 1;
-    margin: 40px auto 0;
-    padding: 26px 22px 0;
-    font-size: 11.5px;
-    color: #57687b;
-    text-align: center;
-  }
-  footer a { color: #7c8fa3; text-decoration: underline; text-underline-offset: 2px; }
+  footer { position: relative; z-index: 1; margin: 44px auto 0; padding: 26px 22px 0; font-size: 12px; color: var(--muted-dim); text-align: center; font-weight: 400; }
+  footer a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
 
-  section + section { margin-top: 64px; }
-  @media (min-width: 900px) { section + section { margin-top: 92px; } }
+  section + section { margin-top: 68px; }
+  @media (min-width: 900px) { section + section { margin-top: 100px; } }
 
   /* ---------- sticky bottom bar ---------- */
-  .stickybar {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
-    display: flex; justify-content: center;
-    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-    background: linear-gradient(180deg, rgba(10,14,19,0), var(--bg) 30%);
-  }
-  .stickybar .inner {
-    width: 100%; max-width: 560px;
-    background: var(--bg-panel); border: 1px solid var(--line-strong);
-    padding: 8px;
-    clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
-    box-shadow: 0 -6px 24px rgba(0,0,0,.35);
-  }
-  .stickybar .cta { width: 100%; padding: 13px 16px; font-size: 15px; }
+  .stickybar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; display: flex; justify-content: center; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: linear-gradient(180deg, rgba(5,7,12,0), var(--bg) 34%); }
+  .stickybar .inner { width: 100%; max-width: 560px; }
+  .stickybar .cta { width: 100%; padding: 15px 16px; font-size: 16px; }
 
   @media (prefers-reduced-motion: reduce) {
-    .eyebrow .dot, .layer-line, .cta, .hero-art .float { animation: none !important; transition: none !important; }
+    .badge .dot, .stat-widget .label .rec, .cta { animation: none !important; transition: none !important; }
   }
 </style>
 
@@ -429,11 +237,11 @@
   <div class="topbar">
     <div class="brandmark">
       <div class="mark">
-        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7"><path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-1)" stroke-width="1.8"><path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg>
       </div>
-      <div class="brand-name"><strong>Achadinhos 3D</strong> · promoções diárias</div>
+      <div class="brand-name"><strong>Achados 3D</strong> · promoções diárias</div>
     </div>
-    <a class="cta-mini" id="cta-top" href="https://chat.whatsapp.com/LCn6wQS7b0a90ITmtV5JrR?s=cl&amp;p=i&amp;ilr=0&amp;amv=0" target="_blank" rel="noopener noreferrer">
+    <a class="btn-mini" id="cta-top" href="https://chat.whatsapp.com/LCn6wQS7b0a90ITmtV5JrR?s=cl&amp;p=i&amp;ilr=0&amp;amv=0" target="_blank" rel="noopener noreferrer">
       <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16.04 3C9.37 3 3.98 8.34 3.98 14.94c0 2.17.58 4.28 1.68 6.15L3 29l8.15-2.6a13.1 13.1 0 0 0 4.89.94h.01c6.67 0 12.06-5.34 12.06-11.94C28.11 8.8 22.72 3 16.04 3zm7.1 17.02c-.3.83-1.7 1.6-2.35 1.7-.6.09-1.36.13-2.19-.14-.5-.16-1.15-.37-1.98-.72-3.5-1.5-5.78-4.99-5.96-5.22-.17-.23-1.42-1.87-1.42-3.57 0-1.7.9-2.53 1.22-2.88.31-.34.68-.43.91-.43.23 0 .46 0 .66.01.21.01.5-.08.78.6.3.71 1 2.45 1.09 2.62.09.18.15.39.03.63-.12.23-.18.38-.36.58-.18.2-.38.45-.54.6-.18.18-.37.37-.16.72.21.35.93 1.52 1.99 2.46 1.37 1.21 2.52 1.59 2.87 1.77.35.18.56.15.76-.09.21-.24.88-1.02 1.11-1.37.24-.35.47-.29.79-.17.32.12 2.05.96 2.4 1.14.35.18.58.26.67.41.09.15.09.85-.21 1.68z"/></svg>
       <span>Entrar no grupo</span>
     </a>
@@ -441,128 +249,89 @@
 
   <section class="hero">
     <div>
-      <span class="eyebrow"><span class="dot"></span>grupo grátis no whatsapp</span>
+      <span class="badge"><span class="dot"></span>Grupo fechado · vagas limitadas</span>
+      <p class="kicker-line">Só achados de impressão 3D</p>
 
-      <h1>Nunca mais perca uma <em>promoção de impressão 3D</em></h1>
-      <div class="layer-line" aria-hidden="true"></div>
+      <h1>Achados 3D<br><span class="hl">Bora printar!</span></h1>
 
-      <p class="sub">Filamento, impressoras, peças e upgrades com desconto — garimpados todo dia e enviados no grupo assim que a oferta aparece, antes que o cupom acabe.</p>
+      <p class="sub">Filamento, impressoras, peças e upgrades com desconto — garimpados todo dia e enviados no grupo assim que a oferta sai, antes que o cupom acabe.</p>
 
       <a class="cta" id="cta-main" href="https://chat.whatsapp.com/LCn6wQS7b0a90ITmtV5JrR?s=cl&amp;p=i&amp;ilr=0&amp;amv=0" target="_blank" rel="noopener noreferrer">
         <svg class="wa" viewBox="0 0 32 32" fill="currentColor"><path d="M16.04 3C9.37 3 3.98 8.34 3.98 14.94c0 2.17.58 4.28 1.68 6.15L3 29l8.15-2.6a13.1 13.1 0 0 0 4.89.94h.01c6.67 0 12.06-5.34 12.06-11.94C28.11 8.8 22.72 3 16.04 3zm7.1 17.02c-.3.83-1.7 1.6-2.35 1.7-.6.09-1.36.13-2.19-.14-.5-.16-1.15-.37-1.98-.72-3.5-1.5-5.78-4.99-5.96-5.22-.17-.23-1.42-1.87-1.42-3.57 0-1.7.9-2.53 1.22-2.88.31-.34.68-.43.91-.43.23 0 .46 0 .66.01.21.01.5-.08.78.6.3.71 1 2.45 1.09 2.62.09.18.15.39.03.63-.12.23-.18.38-.36.58-.18.2-.38.45-.54.6-.18.18-.37.37-.16.72.21.35.93 1.52 1.99 2.46 1.37 1.21 2.52 1.59 2.87 1.77.35.18.56.15.76-.09.21-.24.88-1.02 1.11-1.37.24-.35.47-.29.79-.17.32.12 2.05.96 2.4 1.14.35.18.58.26.67.41.09.15.09.85-.21 1.68z"/></svg>
-        <span>Quero entrar no grupo grátis</span>
-        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <span>Entrar no grupo</span>
       </a>
-
-      <div class="trust-row">
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>100% gratuito</span>
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>Sem spam</span>
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>Saia quando quiser</span>
-      </div>
+      <p class="microcopy"><b>Vagas limitadas!</b> Já garante a tua.</p>
     </div>
 
-    <div class="hero-art" aria-hidden="true">
-      <div class="ring"></div>
-      <div class="ring ring--inner"></div>
-      <svg viewBox="0 0 400 400" style="position:relative;">
-        <!-- printer frame -->
-        <rect x="96" y="70" width="10" height="230" fill="var(--bg-panel-3)" stroke="var(--line-strong)"/>
-        <rect x="294" y="70" width="10" height="230" fill="var(--bg-panel-3)" stroke="var(--line-strong)"/>
-        <rect x="90" y="58" width="220" height="14" fill="var(--bg-panel-3)" stroke="var(--line-strong)"/>
-        <rect x="70" y="292" width="260" height="16" fill="var(--bg-panel-2)" stroke="var(--line-strong)"/>
-
-        <!-- gantry rod + carriage -->
-        <rect x="96" y="132" width="208" height="6" fill="var(--line-strong)"/>
-        <rect x="188" y="120" width="30" height="30" rx="2" fill="var(--bg-panel-2)" stroke="var(--accent)" stroke-width="1.5"/>
-        <line x1="203" y1="150" x2="203" y2="240" stroke="var(--accent)" stroke-width="2" stroke-dasharray="2 4"/>
-        <circle cx="203" cy="242" r="5" fill="var(--accent)">
-          <animate attributeName="cy" values="242;150;242" dur="4.5s" repeatCount="indefinite"/>
-        </circle>
-
-        <!-- bed with printed object (layered) -->
-        <rect x="140" y="252" width="126" height="10" fill="var(--bg-panel-2)" stroke="var(--line-strong)"/>
-        <polygon points="203,180 226,252 180,252" fill="none" stroke="var(--accent-soft)" stroke-width="2" opacity="0.9"/>
-        <line x1="185" y1="230" x2="221" y2="230" stroke="var(--accent-soft)" stroke-width="1.4" opacity="0.6"/>
-        <line x1="189" y1="210" x2="217" y2="210" stroke="var(--accent-soft)" stroke-width="1.4" opacity="0.6"/>
-        <line x1="193" y1="190" x2="213" y2="190" stroke="var(--accent-soft)" stroke-width="1.4" opacity="0.6"/>
-
-        <!-- filament spool -->
-        <circle cx="330" cy="200" r="34" fill="var(--bg-panel-2)" stroke="var(--line-strong)" stroke-width="2"/>
-        <circle cx="330" cy="200" r="14" fill="none" stroke="var(--whatsapp)" stroke-width="6"/>
-        <path d="M310 220 C 260 240, 230 200, 208 152" fill="none" stroke="var(--whatsapp)" stroke-width="2" stroke-dasharray="3 5" opacity="0.7"/>
-      </svg>
-
-      <div class="float float--1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></div>
-      <div class="float float--2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6 9 17l-5-5"/></svg></div>
-      <div class="float float--3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a4 4 0 0 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 1 5.4-5.4z"/></svg></div>
+    <div class="hero-photo">
+      <div class="frame">
+        <img src="https://images.unsplash.com/photo-1758387933125-5ac945b4e2cd?fm=jpg&amp;q=70&amp;w=900&amp;auto=format&amp;fit=crop" alt="Impressora 3D imprimindo com iluminação neon" loading="eager" />
+        <div class="fade" aria-hidden="true"></div>
+      </div>
+      <div class="stat-widget" aria-hidden="true">
+        <div class="label"><span class="rec"></span>imprimindo</div>
+        <div class="big">210<span>°C</span></div>
+        <div class="row"><span>PLA</span><span>78%</span></div>
+        <div class="bar"><i></i></div>
+      </div>
     </div>
   </section>
 
   <section>
     <div class="section-head">
-      <p class="kicker">por que entrar</p>
-      <h2>Curadoria de quem realmente imprime</h2>
-      <p>Sem enrolação, sem post patrocinado escondido — só a oferta, o link e o motivo de valer a pena.</p>
+      <p class="kicker">o que você recebe</p>
+      <h2>Ofertas que realmente valem</h2>
+      <p>Achados de cupons e promoções direto no WhatsApp — sem post patrocinado escondido.</p>
     </div>
     <div class="cards">
-      <div class="card">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div>
-        <h3>Seja o primeiro a saber</h3>
-        <p>As ofertas boas somem em minutos. No grupo, o alerta chega assim que a promoção sai — antes de espalhar.</p>
-      </div>
-      <div class="card">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></div>
-        <h3>Cobre filamento a peça</h3>
-        <p>PLA, PETG, ABS, bicos, hotends, correias, upgrades — tudo que faz sua impressora rodar melhor.</p>
-      </div>
-      <div class="card">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v4H4zM4 10h10v10H4zM16 10h4v10h-4z"/></svg></div>
-        <h3>Zero enrolação</h3>
-        <p>Sem grupo lotado de corrente ou spam. Só link, preço e cupom — você decide se compra.</p>
-      </div>
+      <div class="card"><div class="emoji">🧵</div><h3>Filamento barato</h3><p>PLA, PETG, ABS e mais com desconto real.</p></div>
+      <div class="card"><div class="emoji">🖨️</div><h3>Impressoras & kits</h3><p>Ofertas em impressoras completas e kits de montagem.</p></div>
+      <div class="card"><div class="emoji">🔧</div><h3>Peças & upgrades</h3><p>Bicos, hotends, correias, fontes e sensores.</p></div>
+      <div class="card"><div class="emoji">🎟️</div><h3>Cupons escondidos</h3><p>Cupons que poucas pessoas descobrem.</p></div>
+      <div class="card"><div class="emoji">⚡</div><h3>Promoções relâmpago</h3><p>Apareceu oferta boa, chega na hora no grupo.</p></div>
+      <div class="card"><div class="emoji">🛡️</div><h3>Só lojas confiáveis</h3><p>Amazon, Shopee, AliExpress, Mercado Livre e mais.</p></div>
     </div>
   </section>
 
   <section>
     <div class="section-head">
-      <p class="kicker">como funciona</p>
-      <h2>Três passos até sua próxima economia</h2>
+      <p class="kicker">onde monitoro</p>
+      <h2>Múltiplas lojas. Um grupo.</h2>
     </div>
-    <div class="steps">
-      <div class="step">
-        <div class="num">1</div>
-        <h3>Entre no grupo grátis</h3>
-        <p>Um clique no botão, sem cadastro e sem cartão.</p>
-      </div>
-      <div class="step">
-        <div class="num">2</div>
-        <h3>Receba os alertas</h3>
-        <p>A oferta chega direto no seu WhatsApp, na hora que sai.</p>
-      </div>
-      <div class="step">
-        <div class="num">3</div>
-        <h3>Compre antes que acabe</h3>
-        <p>Cupom e estoque de promoção não duram — quem vê primeiro, garante.</p>
-      </div>
+    <div class="stores">
+      <span class="store-pill">Amazon</span>
+      <span class="store-pill">Shopee</span>
+      <span class="store-pill">AliExpress</span>
+      <span class="store-pill">Mercado Livre</span>
+      <span class="store-pill">Kabum</span>
+      <span class="store-pill">Creality Store</span>
+      <span class="store-pill plus">+ Outras</span>
     </div>
   </section>
 
   <section>
-    <div class="urgency">
-      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></div>
-      <p><b>As ofertas de impressão 3D somem rápido.</b> Quem não está no grupo, só descobre a promoção depois que o cupom já acabou.</p>
+    <div class="section-head">
+      <p class="kicker">por que entrar agora</p>
+      <h2>Achados somem rápido. Quem tá no grupo, aproveita.</h2>
+    </div>
+    <div class="reasons">
+      <div class="reason"><div class="num">01</div><div><h3>Só o admin fala</h3><p>Sem spam, sem bagunça. Apenas ofertas selecionadas direto pra você.</p></div></div>
+      <div class="reason"><div class="num">02</div><div><h3>Grupo com vagas limitadas</h3><p>O WhatsApp limita o tamanho de cada grupo — quando encher, não dá pra entrar.</p></div></div>
+      <div class="reason"><div class="num">03</div><div><h3>Estoque de promoção é curto</h3><p>Cupom bom e estoque baixo somem em minutos, não em dias.</p></div></div>
+      <div class="reason"><div class="num">04</div><div><h3>Saiu, perdeu</h3><p>Quem sai do grupo deixa de receber os próximos alertas.</p></div></div>
     </div>
   </section>
 
   <section>
     <div class="final-cta">
-      <h2>Sua próxima peça pode custar bem menos</h2>
-      <p>Entre agora e não perca a próxima promoção — é grátis e leva 5 segundos.</p>
+      <p class="kicker">vagas se esgotando</p>
+      <h2>Não fica de fora.<br>Bora printar!</h2>
+      <p>Cada dia fora do grupo é uma promoção que você perdeu. Entra agora, antes que feche.</p>
       <a class="cta" id="cta-final" href="https://chat.whatsapp.com/LCn6wQS7b0a90ITmtV5JrR?s=cl&amp;p=i&amp;ilr=0&amp;amv=0" target="_blank" rel="noopener noreferrer">
         <svg class="wa" viewBox="0 0 32 32" fill="currentColor"><path d="M16.04 3C9.37 3 3.98 8.34 3.98 14.94c0 2.17.58 4.28 1.68 6.15L3 29l8.15-2.6a13.1 13.1 0 0 0 4.89.94h.01c6.67 0 12.06-5.34 12.06-11.94C28.11 8.8 22.72 3 16.04 3zm7.1 17.02c-.3.83-1.7 1.6-2.35 1.7-.6.09-1.36.13-2.19-.14-.5-.16-1.15-.37-1.98-.72-3.5-1.5-5.78-4.99-5.96-5.22-.17-.23-1.42-1.87-1.42-3.57 0-1.7.9-2.53 1.22-2.88.31-.34.68-.43.91-.43.23 0 .46 0 .66.01.21.01.5-.08.78.6.3.71 1 2.45 1.09 2.62.09.18.15.39.03.63-.12.23-.18.38-.36.58-.18.2-.38.45-.54.6-.18.18-.37.37-.16.72.21.35.93 1.52 1.99 2.46 1.37 1.21 2.52 1.59 2.87 1.77.35.18.56.15.76-.09.21-.24.88-1.02 1.11-1.37.24-.35.47-.29.79-.17.32.12 2.05.96 2.4 1.14.35.18.58.26.67.41.09.15.09.85-.21 1.68z"/></svg>
         <span>Entrar no grupo agora</span>
-        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
+      <p class="microcopy">✓ Grátis. Para sempre. Só achados de impressão 3D.</p>
     </div>
   </section>
 
@@ -575,7 +344,7 @@
   <div class="inner">
     <a class="cta" id="cta-sticky" href="https://chat.whatsapp.com/LCn6wQS7b0a90ITmtV5JrR?s=cl&amp;p=i&amp;ilr=0&amp;amv=0" target="_blank" rel="noopener noreferrer">
       <svg class="wa" viewBox="0 0 32 32" fill="currentColor"><path d="M16.04 3C9.37 3 3.98 8.34 3.98 14.94c0 2.17.58 4.28 1.68 6.15L3 29l8.15-2.6a13.1 13.1 0 0 0 4.89.94h.01c6.67 0 12.06-5.34 12.06-11.94C28.11 8.8 22.72 3 16.04 3zm7.1 17.02c-.3.83-1.7 1.6-2.35 1.7-.6.09-1.36.13-2.19-.14-.5-.16-1.15-.37-1.98-.72-3.5-1.5-5.78-4.99-5.96-5.22-.17-.23-1.42-1.87-1.42-3.57 0-1.7.9-2.53 1.22-2.88.31-.34.68-.43.91-.43.23 0 .46 0 .66.01.21.01.5-.08.78.6.3.71 1 2.45 1.09 2.62.09.18.15.39.03.63-.12.23-.18.38-.36.58-.18.2-.38.45-.54.6-.18.18-.37.37-.16.72.21.35.93 1.52 1.99 2.46 1.37 1.21 2.52 1.59 2.87 1.77.35.18.56.15.76-.09.21-.24.88-1.02 1.11-1.37.24-.35.47-.29.79-.17.32.12 2.05.96 2.4 1.14.35.18.58.26.67.41.09.15.09.85-.21 1.68z"/></svg>
-      <span>Quero entrar no grupo grátis</span>
+      <span>Entrar no grupo</span>
     </a>
   </div>
 </div>
@@ -597,44 +366,16 @@
     window.addEventListener('resize', resize);
     resize();
 
-    var step = 42 * dpr;
-    var t = 0;
+    var step = 44 * dpr;
 
-    function drawGrid(offset) {
+    function drawGrid() {
       ctx.clearRect(0, 0, w, h);
-      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)';
       ctx.lineWidth = 1;
-      for (var x = (offset % step); x < w; x += step) {
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-      }
-      for (var y = 0; y < h; y += step) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-      }
-
-      var pathY = h * 0.1;
-      var px = (offset * 2.4) % (w + 200) - 100;
-      ctx.strokeStyle = 'rgba(255,138,61,0.3)';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(0, pathY);
-      ctx.lineTo(Math.max(0, px), pathY);
-      ctx.stroke();
-
-      ctx.fillStyle = 'rgba(255,138,61,0.85)';
-      ctx.beginPath();
-      ctx.arc(Math.max(0, px), pathY, 3 * dpr, 0, Math.PI * 2);
-      ctx.fill();
+      for (var x = 0; x < w; x += step) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+      for (var y = 0; y < h; y += step) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
     }
-
-    if (reduceMotion) {
-      drawGrid(0);
-    } else {
-      requestAnimationFrame(function loop() {
-        t += 1;
-        drawGrid(t);
-        requestAnimationFrame(loop);
-      });
-    }
+    drawGrid();
   })();
 
   // Conversion tracking: fires only if a pixel is present on the page.
