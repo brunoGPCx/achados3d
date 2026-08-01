@@ -62,13 +62,14 @@
   var search = new URLSearchParams(window.location.search);
   var day = saoPauloDay();
 
-  function sendEvent(eventType, ctaId) {
+  function sendEvent(eventType, ctaId, groupId) {
     var documentId = randomId();
     var body = {
       fields: {
         eventType: { stringValue: eventType },
         dayType: { stringValue: day + ":" + eventType },
         ctaId: { stringValue: clean(ctaId, 30) },
+        groupId: { stringValue: clean(groupId, 64) },
         path: { stringValue: clean(window.location.pathname, 120) },
         sessionId: { stringValue: sessionId },
         source: { stringValue: clean(search.get("utm_source"), 100) },
@@ -94,16 +95,16 @@
 
   if (!storageGet(STARTED_KEY)) {
     storageSet(STARTED_KEY, "1");
-    sendEvent("session_start", "");
+    sendEvent("session_start", "", "");
   }
-  sendEvent("page_view", "");
+  sendEvent("page_view", "", "");
 
   var buttons = document.querySelectorAll("#cta-top, #cta-main, #cta-final, #cta-sticky");
   buttons.forEach(function (button) {
     button.addEventListener("click", function () {
       if (storageGet(CLICKED_KEY)) return;
       storageSet(CLICKED_KEY, "1");
-      sendEvent("cta_click", button.id);
+      sendEvent("cta_click", button.id, button.dataset.groupId || "grupo-1");
     });
   });
 })();

@@ -2,6 +2,12 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email == 'brunogarciawork@gmail.com';
+    }
+
     function isShortString(value, maxLength) {
       return value is string && value.size() <= maxLength;
     }
@@ -9,7 +15,7 @@ service cloud.firestore {
     function isValidEvent() {
       let data = request.resource.data;
       return data.keys().hasOnly([
-          'eventType', 'dayType', 'ctaId', 'path', 'sessionId', 'source',
+          'eventType', 'dayType', 'ctaId', 'groupId', 'path', 'sessionId', 'source',
           'medium', 'campaign', 'referrerHost', 'screen', 'createdAt'
         ])
         && data.keys().hasAll([
@@ -20,6 +26,7 @@ service cloud.firestore {
         && isShortString(data.dayType, 40)
         && data.dayType.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}:(page_view|session_start|cta_click)$')
         && isShortString(data.ctaId, 30)
+        && (!('groupId' in data) || isShortString(data.groupId, 64))
         && (
           (data.eventType == 'cta_click' && data.ctaId in ['cta-top', 'cta-main', 'cta-final', 'cta-sticky'])
           || (data.eventType != 'cta_click' && data.ctaId == '')
@@ -39,8 +46,18 @@ service cloud.firestore {
 
     match /events/{eventId} {
       allow create: if eventId.matches('^[A-Za-z0-9_-]{16,64}$') && isValidEvent();
-      allow read: if true;
+      allow read: if isAdmin();
       allow update, delete: if false;
+    }
+
+    match /settings/groups {
+      allow read: if isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /public/site {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
     }
 
     match /{document=**} {

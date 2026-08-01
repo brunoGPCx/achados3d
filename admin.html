@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#05070c">
+  <title>Painel administrativo — Achados 3D</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme:dark; --bg:#05070c; --panel:#0c111b; --panel2:#111827; --ink:#f3f6fa; --muted:#93a3b8; --dim:#64748b; --line:rgba(255,255,255,.09); --orange:#ff7a32; --green:#25d366; --red:#ff6b6b; --yellow:#fbbf24; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none !important; }
+    body { margin:0; min-height:100vh; background:radial-gradient(circle at 50% -18%,rgba(255,122,50,.15),transparent 38%),var(--bg); color:var(--ink); font-family:"Barlow",system-ui,sans-serif; }
+    button,input,select { font:inherit; }
+    button { cursor:pointer; }
+    .login-shell { min-height:100vh; display:grid; place-items:center; padding:24px; }
+    .login-card { width:min(450px,100%); padding:34px; border:1px solid var(--line); border-radius:26px; background:linear-gradient(145deg,rgba(17,24,39,.98),rgba(7,10,17,.98)); box-shadow:0 30px 80px rgba(0,0,0,.35); text-align:center; }
+    .cube { width:58px; height:58px; display:grid; place-items:center; margin:0 auto 22px; border:1px solid rgba(255,122,50,.3); border-radius:18px; background:rgba(255,122,50,.1); color:var(--orange); font:900 24px "Barlow Condensed",sans-serif; }
+    .eyebrow { margin:0 0 7px; color:var(--orange); text-transform:uppercase; letter-spacing:.2em; font-size:12px; font-weight:800; }
+    h1,h2,h3 { margin:0; font-family:"Barlow Condensed",sans-serif; text-transform:uppercase; line-height:1; }
+    .login-card h1 { font-size:clamp(38px,8vw,58px); }
+    .login-card>p:not(.eyebrow):not(.login-message) { margin:16px auto 24px; color:var(--muted); max-width:340px; }
+    .google-button { width:100%; display:flex; align-items:center; justify-content:center; gap:12px; border:0; border-radius:14px; padding:14px 18px; background:#fff; color:#151515; font-weight:700; }
+    .google-mark { width:24px; height:24px; display:grid; place-items:center; border-radius:50%; color:#4285f4; font-weight:900; }
+    .login-message { min-height:22px; margin:14px 0 0; color:var(--red); font-size:14px; }
+    .app { width:min(1180px,calc(100% - 32px)); margin:0 auto; padding:24px 0 64px; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px 0 24px; border-bottom:1px solid var(--line); }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand .cube { width:42px; height:42px; margin:0; border-radius:13px; font-size:18px; }
+    .brand strong { display:block; font-family:"Barlow Condensed",sans-serif; text-transform:uppercase; font-size:22px; line-height:1; }
+    .brand small { color:var(--muted); }
+    .account { display:flex; align-items:center; gap:12px; color:var(--muted); font-size:14px; }
+    .ghost,.primary,.danger-soft { border:1px solid var(--line); border-radius:12px; padding:10px 14px; color:var(--ink); background:var(--panel2); font-weight:700; }
+    .primary { border:0; background:linear-gradient(135deg,#ff6528,#ff9b3f); color:#140b05; }
+    .danger-soft { color:#ff9b9b; }
+    .nav { display:flex; gap:8px; padding:24px 0; }
+    .nav button { border:1px solid transparent; border-radius:999px; padding:11px 18px; background:transparent; color:var(--muted); font-weight:700; }
+    .nav button.active { border-color:rgba(255,122,50,.26); color:var(--ink); background:rgba(255,122,50,.1); }
+    .section-head { display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin:8px 0 22px; }
+    .section-head h1 { font-size:clamp(42px,7vw,70px); }
+    .section-head p { margin:8px 0 0; color:var(--muted); }
+    .status-line { min-height:22px; margin:0 0 16px; color:var(--muted); }
+    .status-line.error { color:var(--red); }
+    .metrics-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .metric,.surface { border:1px solid var(--line); border-radius:20px; background:linear-gradient(145deg,rgba(17,24,39,.96),rgba(8,12,20,.96)); }
+    .metric { min-height:142px; padding:22px; display:flex; flex-direction:column; justify-content:space-between; }
+    .metric span { color:var(--muted); font-size:14px; font-weight:600; }
+    .metric strong { font:800 52px/1 "Barlow Condensed",sans-serif; }
+    .metric strong.green { color:var(--green); }
+    .metric small { color:var(--dim); }
+    .subheading { font-size:28px; margin:34px 0 16px; }
+    .surface { padding:22px; }
+    .metric-row { display:grid; grid-template-columns:1fr auto; align-items:center; gap:14px; padding:15px 0; border-bottom:1px solid var(--line); }
+    .metric-row:last-child { border:0; }
+    .metric-row span { color:var(--muted); }
+    .metric-row strong { font:800 28px/1 "Barlow Condensed",sans-serif; }
+    .groups-toolbar { display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:15px; }
+    .groups-toolbar p { margin:0; color:var(--muted); }
+    .groups-list { display:grid; gap:12px; }
+    .group-card { display:grid; grid-template-columns:78px minmax(150px,.8fr) minmax(260px,1.6fr) 150px auto; gap:12px; align-items:end; padding:18px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(145deg,rgba(17,24,39,.96),rgba(8,12,20,.96)); }
+    .group-number { align-self:center; }
+    .group-number strong { display:block; font:800 25px/1 "Barlow Condensed",sans-serif; color:var(--orange); }
+    .group-number small { color:var(--dim); }
+    label { display:block; color:var(--muted); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
+    input,select { width:100%; margin-top:7px; padding:11px 12px; border:1px solid var(--line); border-radius:11px; outline:0; background:#080d16; color:var(--ink); }
+    input:focus,select:focus { border-color:rgba(255,122,50,.65); box-shadow:0 0 0 3px rgba(255,122,50,.1); }
+    .group-actions { display:flex; gap:6px; align-items:center; }
+    .icon-button { width:39px; height:39px; display:grid; place-items:center; padding:0; border:1px solid var(--line); border-radius:10px; background:#101722; color:var(--muted); }
+    .icon-button:hover { color:var(--ink); border-color:rgba(255,122,50,.4); }
+    .icon-button.remove:hover { color:var(--red); border-color:rgba(255,107,107,.4); }
+    .group-clicks { grid-column:2/-1; color:var(--dim); font-size:13px; }
+    .savebar { position:sticky; bottom:14px; display:flex; justify-content:space-between; align-items:center; gap:18px; margin-top:18px; padding:14px 16px; border:1px solid var(--line); border-radius:16px; background:rgba(12,17,27,.94); backdrop-filter:blur(14px); box-shadow:0 16px 40px rgba(0,0,0,.3); }
+    .savebar span { color:var(--muted); font-size:14px; }
+    .toast { position:fixed; right:22px; bottom:22px; z-index:20; padding:13px 17px; border-radius:12px; background:#153d2b; border:1px solid rgba(37,211,102,.3); color:#baf5ce; box-shadow:0 16px 40px rgba(0,0,0,.3); }
+    @media(max-width:850px){.group-card{grid-template-columns:68px 1fr 150px}.link-field{grid-column:2/-1}.group-actions{grid-column:2/-1}.metrics-grid{grid-template-columns:1fr}.metric{min-height:118px}}
+    @media(max-width:580px){.app{width:min(100% - 22px,1180px)}.topbar{align-items:flex-start}.account span{display:none}.section-head{align-items:flex-start;flex-direction:column}.groups-toolbar{align-items:flex-start;flex-direction:column}.group-card{grid-template-columns:1fr}.group-number,.name-field,.link-field,.status-field,.group-actions,.group-clicks{grid-column:1}.group-actions{justify-content:flex-end}.savebar{align-items:stretch;flex-direction:column}.savebar .primary{width:100%}}
+  </style>
+</head>
+<body>
+  <section class="login-shell" id="login-view">
+    <div class="login-card">
+      <div class="cube">3D</div>
+      <p class="eyebrow">Área protegida</p>
+      <h1>Painel administrativo</h1>
+      <p>Entre com a conta Google autorizada para acessar métricas e gerenciar os grupos.</p>
+      <button class="google-button" id="google-login" type="button"><span class="google-mark">G</span>Entrar com Google</button>
+      <p class="login-message" id="login-message"></p>
+    </div>
+  </section>
+
+  <div class="app" id="admin-view" hidden>
+    <header class="topbar">
+      <div class="brand"><div class="cube">3D</div><div><strong>Achados 3D</strong><small>Painel administrativo</small></div></div>
+      <div class="account"><span id="account-email"></span><button class="ghost" id="logout" type="button">Sair</button></div>
+    </header>
+    <nav class="nav" aria-label="Áreas do painel">
+      <button class="active" data-tab="metricas" type="button">Métricas</button>
+      <button data-tab="grupos" type="button">Grupos do WhatsApp</button>
+    </nav>
+
+    <main>
+      <section class="panel-view" id="panel-metricas">
+        <div class="section-head"><div><p class="eyebrow">Desempenho</p><h1>Métricas</h1><p>Visitas e pessoas que clicaram para entrar no grupo.</p></div><button class="ghost" id="refresh-metrics" type="button">Atualizar</button></div>
+        <p class="status-line" id="metrics-status">Carregando os números...</p>
+        <h2 class="subheading">Hoje</h2>
+        <div class="metrics-grid">
+          <article class="metric"><span>Pessoas no site</span><strong id="sessions-today">—</strong><small>Sessões iniciadas</small></article>
+          <article class="metric"><span>Visualizações</span><strong id="views-today">—</strong><small>Páginas carregadas</small></article>
+          <article class="metric"><span>Pessoas que clicaram</span><strong class="green" id="clicks-today">—</strong><small id="conversion-today">Conversão: —</small></article>
+        </div>
+        <h2 class="subheading">Desde o início da coleta</h2>
+        <div class="metrics-grid">
+          <article class="metric"><span>Pessoas no site</span><strong id="sessions-total">—</strong><small>Sessões iniciadas</small></article>
+          <article class="metric"><span>Visualizações</span><strong id="views-total">—</strong><small>Páginas carregadas</small></article>
+          <article class="metric"><span>Pessoas que clicaram</span><strong class="green" id="clicks-total">—</strong><small id="conversion-total">Conversão: —</small></article>
+        </div>
+        <h2 class="subheading">Botões que geraram o clique</h2>
+        <div class="surface">
+          <div class="metric-row"><span>Botão do topo</span><strong id="cta-top-count">—</strong></div>
+          <div class="metric-row"><span>Botão principal</span><strong id="cta-main-count">—</strong></div>
+          <div class="metric-row"><span>Botão final</span><strong id="cta-final-count">—</strong></div>
+          <div class="metric-row"><span>Botão fixo no celular</span><strong id="cta-sticky-count">—</strong></div>
+        </div>
+      </section>
+
+      <section class="panel-view" id="panel-grupos" hidden>
+        <div class="section-head"><div><p class="eyebrow">Destinos dos botões</p><h1>Grupos do WhatsApp</h1><p>O primeiro grupo ativo da lista recebe os novos cliques.</p></div><a class="ghost" href="/" target="_blank" rel="noopener" style="text-decoration:none">Ver site</a></div>
+        <div class="groups-toolbar"><p>Marque grupos lotados ou pausados; o próximo ativo assume automaticamente.</p><button class="ghost" id="add-group" type="button">+ Adicionar grupo</button></div>
+        <p class="status-line" id="groups-status"></p>
+        <div class="groups-list" id="groups-list"></div>
+        <div class="savebar"><span id="save-hint">Nenhuma alteração pendente.</span><button class="primary" id="save-groups" type="button">Salvar configuração</button></div>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast" hidden></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+    import { collection, doc, getDoc, getFirestore, getCountFromServer, query, serverTimestamp, where, writeBatch } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+    const ADMIN_EMAIL = "brunogarciawork@gmail.com";
+    const CURRENT_LINK = "https://chat.whatsapp.com/LCn6wQS7b0a90ITmtV5JrR?s=cl&p=i&ilr=0&amv=0";
+    const firebaseConfig = {
+      projectId: "achados3d-metricas-bruno",
+      appId: "1:681923735724:web:047115c1f02fd28aa56f09",
+      apiKey: "AIzaSyDiEAA8o0X9JghlJgJuao0icYbEeZ0sjf8",
+      authDomain: "achados3d-metricas-bruno.firebaseapp.com"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account", login_hint: ADMIN_EMAIL });
+    let groups = [];
+    let currentUser = null;
+    let dirty = false;
+    let blockedMessage = "";
+
+    const loginView = document.getElementById("login-view");
+    const adminView = document.getElementById("admin-view");
+    const loginMessage = document.getElementById("login-message");
+    const groupsList = document.getElementById("groups-list");
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.hidden = false;
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => { toast.hidden = true; }, 3000);
+    }
+
+    function isAdmin(user) {
+      return user && user.emailVerified && String(user.email).toLowerCase() === ADMIN_EMAIL;
+    }
+
+    document.getElementById("google-login").addEventListener("click", async () => {
+      loginMessage.textContent = "Abrindo o login seguro...";
+      try { await signInWithPopup(auth, provider); }
+      catch (error) {
+        loginMessage.textContent = error.code === "auth/popup-closed-by-user" ? "O login foi fechado antes de concluir." : "Não foi possível entrar. Tente novamente.";
+      }
+    });
+    document.getElementById("logout").addEventListener("click", () => signOut(auth));
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        currentUser = null;
+        adminView.hidden = true;
+        loginView.hidden = false;
+        loginMessage.textContent = blockedMessage;
+        blockedMessage = "";
+        return;
+      }
+      if (!isAdmin(user)) {
+        blockedMessage = "A conta " + (user.email || "selecionada") + " não tem permissão para acessar este painel.";
+        await signOut(auth);
+        return;
+      }
+      currentUser = user;
+      loginView.hidden = true;
+      adminView.hidden = false;
+      document.getElementById("account-email").textContent = user.email;
+      await Promise.all([loadMetrics(), loadGroups()]);
+      openTab(location.hash === "#grupos" ? "grupos" : "metricas");
+    });
+
+    function openTab(name) {
+      document.querySelectorAll(".nav button").forEach(button => button.classList.toggle("active", button.dataset.tab === name));
+      document.querySelectorAll(".panel-view").forEach(panel => { panel.hidden = panel.id !== "panel-" + name; });
+      history.replaceState(null, "", "#" + name);
+    }
+    document.querySelectorAll(".nav button").forEach(button => button.addEventListener("click", () => openTab(button.dataset.tab)));
+
+    function saoPauloDay() {
+      const parts = new Intl.DateTimeFormat("en-CA", { timeZone:"America/Sao_Paulo", year:"numeric", month:"2-digit", day:"2-digit" }).formatToParts(new Date());
+      const date = {};
+      parts.forEach(part => { date[part.type] = part.value; });
+      return date.year + "-" + date.month + "-" + date.day;
+    }
+    async function countWhere(field, value) {
+      const snapshot = await getCountFromServer(query(collection(db, "events"), where(field, "==", value)));
+      return snapshot.data().count;
+    }
+    function setNumber(id, value) { document.getElementById(id).textContent = Number(value).toLocaleString("pt-BR"); }
+    function conversion(clicks, sessions) { return sessions ? ((clicks / sessions) * 100).toFixed(1).replace(".", ",") + "%" : "0%"; }
+    async function loadMetrics() {
+      const status = document.getElementById("metrics-status");
+      const button = document.getElementById("refresh-metrics");
+      const day = saoPauloDay();
+      status.className = "status-line";
+      status.textContent = "Atualizando...";
+      button.disabled = true;
+      try {
+        const numbers = await Promise.all([
+          countWhere("dayType", day + ":session_start"), countWhere("dayType", day + ":page_view"), countWhere("dayType", day + ":cta_click"),
+          countWhere("eventType", "session_start"), countWhere("eventType", "page_view"), countWhere("eventType", "cta_click"),
+          countWhere("ctaId", "cta-top"), countWhere("ctaId", "cta-main"), countWhere("ctaId", "cta-final"), countWhere("ctaId", "cta-sticky")
+        ]);
+        setNumber("sessions-today", numbers[0]); setNumber("views-today", numbers[1]); setNumber("clicks-today", numbers[2]);
+        document.getElementById("conversion-today").textContent = "Conversão: " + conversion(numbers[2], numbers[0]);
+        setNumber("sessions-total", numbers[3]); setNumber("views-total", numbers[4]); setNumber("clicks-total", numbers[5]);
+        document.getElementById("conversion-total").textContent = "Conversão: " + conversion(numbers[5], numbers[3]);
+        setNumber("cta-top-count", numbers[6]); setNumber("cta-main-count", numbers[7]); setNumber("cta-final-count", numbers[8]); setNumber("cta-sticky-count", numbers[9]);
+        status.textContent = "Atualizado agora, no horário de Brasília.";
+      } catch (_) {
+        status.className = "status-line error";
+        status.textContent = "Não foi possível carregar as métricas agora.";
+      } finally { button.disabled = false; }
+    }
+    document.getElementById("refresh-metrics").addEventListener("click", loadMetrics);
+
+    function defaultGroups() { return [{ id:"grupo-1", name:"Grupo 1", url:CURRENT_LINK, status:"active", order:0 }]; }
+    function newId() { return "grupo-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8); }
+    function validLink(value) { try { const url = new URL(value); return url.protocol === "https:" && url.hostname === "chat.whatsapp.com" && url.pathname.length > 2; } catch (_) { return false; } }
+    function markDirty() { dirty = true; document.getElementById("save-hint").textContent = "Há alterações que ainda não foram salvas."; }
+    function clearDirty() { dirty = false; document.getElementById("save-hint").textContent = "Configuração salva e ativa no site."; }
+
+    async function loadGroups() {
+      const status = document.getElementById("groups-status");
+      status.textContent = "Carregando grupos...";
+      try {
+        const snapshot = await getDoc(doc(db, "settings", "groups"));
+        groups = snapshot.exists() && Array.isArray(snapshot.data().groups) ? snapshot.data().groups : defaultGroups();
+        groups.sort((a,b) => Number(a.order) - Number(b.order));
+        renderGroups();
+        status.textContent = groups.some(group => group.status === "active" && validLink(group.url)) ? "O primeiro grupo ativo da lista está recebendo os cliques." : "Nenhum grupo ativo: os botões do site serão temporariamente desabilitados.";
+        clearDirty();
+        loadGroupClickCounts();
+      } catch (_) {
+        status.className = "status-line error";
+        status.textContent = "Não foi possível carregar os grupos.";
+      }
+    }
+
+    function renderGroups() {
+      groupsList.textContent = "";
+      groups.forEach((group, index) => {
+        const card = document.createElement("article");
+        card.className = "group-card";
+        card.dataset.index = String(index);
+        card.innerHTML = `<div class="group-number"><strong>LINK ${index + 1}</strong><small>Prioridade ${index + 1}</small></div>
+          <label class="name-field">Nome<input data-field="name" maxlength="60" placeholder="Ex.: Grupo 1"></label>
+          <label class="link-field">Link do grupo<input data-field="url" type="url" placeholder="https://chat.whatsapp.com/..."></label>
+          <label class="status-field">Situação<select data-field="status"><option value="active">Ativo</option><option value="paused">Pausado</option><option value="full">Lotado</option></select></label>
+          <div class="group-actions"><button class="icon-button" data-action="up" title="Subir" type="button">↑</button><button class="icon-button" data-action="down" title="Descer" type="button">↓</button><button class="icon-button" data-action="open" title="Abrir link" type="button">↗</button><button class="icon-button remove" data-action="remove" title="Remover" type="button">×</button></div>
+          <div class="group-clicks" data-clicks>Cliques enviados para este grupo: carregando...</div>`;
+        card.querySelector('[data-field="name"]').value = group.name || "";
+        card.querySelector('[data-field="url"]').value = group.url || "";
+        card.querySelector('[data-field="status"]').value = group.status || "paused";
+        groupsList.appendChild(card);
+      });
+    }
+
+    groupsList.addEventListener("input", event => {
+      const card = event.target.closest(".group-card");
+      const field = event.target.dataset.field;
+      if (!card || !field) return;
+      groups[Number(card.dataset.index)][field] = event.target.value;
+      markDirty();
+    });
+    groupsList.addEventListener("change", event => {
+      const card = event.target.closest(".group-card");
+      const field = event.target.dataset.field;
+      if (!card || !field) return;
+      groups[Number(card.dataset.index)][field] = event.target.value;
+      markDirty();
+    });
+    groupsList.addEventListener("click", event => {
+      const button = event.target.closest("[data-action]");
+      const card = event.target.closest(".group-card");
+      if (!button || !card) return;
+      const index = Number(card.dataset.index);
+      const action = button.dataset.action;
+      if (action === "up" && index > 0) [groups[index - 1], groups[index]] = [groups[index], groups[index - 1]];
+      if (action === "down" && index < groups.length - 1) [groups[index + 1], groups[index]] = [groups[index], groups[index + 1]];
+      if (action === "open" && validLink(groups[index].url)) window.open(groups[index].url, "_blank", "noopener");
+      if (action === "remove" && confirm("Remover " + (groups[index].name || "este grupo") + " da configuração?")) groups.splice(index, 1);
+      if (["up","down","remove"].includes(action)) { renderGroups(); markDirty(); loadGroupClickCounts(); }
+    });
+
+    document.getElementById("add-group").addEventListener("click", () => {
+      groups.push({ id:newId(), name:"Grupo " + (groups.length + 1), url:"", status:"paused", order:groups.length });
+      renderGroups(); markDirty();
+    });
+
+    async function saveGroups() {
+      const status = document.getElementById("groups-status");
+      const button = document.getElementById("save-groups");
+      const invalid = groups.find(group => group.status === "active" && !validLink(group.url));
+      if (invalid) { status.className = "status-line error"; status.textContent = (invalid.name || "Um grupo ativo") + " precisa de um link válido do chat.whatsapp.com."; return; }
+      button.disabled = true;
+      status.className = "status-line";
+      status.textContent = "Salvando...";
+      try {
+        const normalized = groups.map((group,index) => ({ id:String(group.id || newId()), name:String(group.name || "Grupo " + (index + 1)).slice(0,60), url:String(group.url || "").trim(), status:["active","paused","full"].includes(group.status) ? group.status : "paused", order:index }));
+        const activeGroup = normalized.find(group => group.status === "active" && validLink(group.url));
+        const batch = writeBatch(db);
+        batch.set(doc(db, "settings", "groups"), { groups:normalized, updatedAt:serverTimestamp() });
+        batch.set(doc(db, "public", "site"), {
+          available:Boolean(activeGroup),
+          groupId:activeGroup ? activeGroup.id : "",
+          groupName:activeGroup ? activeGroup.name : "",
+          url:activeGroup ? activeGroup.url : "",
+          updatedAt:serverTimestamp()
+        });
+        await batch.commit();
+        groups = normalized;
+        clearDirty();
+        status.textContent = groups.some(group => group.status === "active" && validLink(group.url)) ? "Configuração publicada. O primeiro grupo ativo já está recebendo os cliques." : "Configuração publicada sem grupos ativos; os botões ficarão desabilitados.";
+        showToast("Configuração dos grupos salva.");
+        renderGroups(); loadGroupClickCounts();
+      } catch (_) {
+        status.className = "status-line error";
+        status.textContent = "Não foi possível salvar. Confirme que você está na conta autorizada.";
+      } finally { button.disabled = false; }
+    }
+    document.getElementById("save-groups").addEventListener("click", saveGroups);
+
+    async function loadGroupClickCounts() {
+      const cards = [...groupsList.querySelectorAll(".group-card")];
+      await Promise.all(groups.map(async (group,index) => {
+        try { const count = await countWhere("groupId", group.id); if (cards[index]) cards[index].querySelector("[data-clicks]").textContent = "Cliques enviados para este grupo: " + count.toLocaleString("pt-BR"); }
+        catch (_) { if (cards[index]) cards[index].querySelector("[data-clicks]").textContent = "Cliques enviados para este grupo: —"; }
+      }));
+    }
+
+    window.addEventListener("beforeunload", event => { if (dirty) { event.preventDefault(); event.returnValue = ""; } });
+  </script>
+</body>
+</html>

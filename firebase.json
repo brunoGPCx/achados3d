@@ -1,4 +1,15 @@
 {
+  "auth": {
+    "providers": {
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "Achados 3D",
+        "supportEmail": "brunogarciawork@gmail.com",
+        "authorizedRedirectUris": [
+          "https://achados3d.netlify.app"
+        ]
+      }
+    }
+  },
   "firestore": {
     "rules": "firestore.rules"
   }
