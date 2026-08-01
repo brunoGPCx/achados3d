@@ -145,8 +145,13 @@
   .cta svg.wa { width: 24px; height: 24px; flex: none; }
   @media (min-width: 480px) { .cta { width: auto; padding-left: 38px; padding-right: 38px; } }
 
-  .final-cta .microcopy { margin: 22px auto 0; font-size: 14px; color: var(--muted-dim); font-weight: 500; }
-  .microcopy b { color: var(--accent-2); font-weight: 700; }
+  .final-cta .microcopy {
+    display: grid; gap: 6px; width: max-content; max-width: 100%;
+    margin: 22px auto 0; padding: 0; list-style: none;
+    font-size: 14px; color: var(--muted); font-weight: 500; text-align: left;
+  }
+  .final-cta .microcopy li { display: flex; align-items: flex-start; gap: 8px; }
+  .final-cta .microcopy li::before { content: "✓"; color: var(--whatsapp); font-weight: 800; flex: none; }
 
   /* ---------- hero video ---------- */
   .hero-video { position: relative; max-width: 900px; margin: 46px auto 0; }
@@ -455,7 +460,11 @@
         <svg class="wa" viewBox="0 0 32 32" fill="currentColor"><path d="M16.04 3C9.37 3 3.98 8.34 3.98 14.94c0 2.17.58 4.28 1.68 6.15L3 29l8.15-2.6a13.1 13.1 0 0 0 4.89.94h.01c6.67 0 12.06-5.34 12.06-11.94C28.11 8.8 22.72 3 16.04 3zm7.1 17.02c-.3.83-1.7 1.6-2.35 1.7-.6.09-1.36.13-2.19-.14-.5-.16-1.15-.37-1.98-.72-3.5-1.5-5.78-4.99-5.96-5.22-.17-.23-1.42-1.87-1.42-3.57 0-1.7.9-2.53 1.22-2.88.31-.34.68-.43.91-.43.23 0 .46 0 .66.01.21.01.5-.08.78.6.3.71 1 2.45 1.09 2.62.09.18.15.39.03.63-.12.23-.18.38-.36.58-.18.2-.38.45-.54.6-.18.18-.37.37-.16.72.21.35.93 1.52 1.99 2.46 1.37 1.21 2.52 1.59 2.87 1.77.35.18.56.15.76-.09.21-.24.88-1.02 1.11-1.37.24-.35.47-.29.79-.17.32.12 2.05.96 2.4 1.14.35.18.58.26.67.41.09.15.09.85-.21 1.68z"/></svg>
         <span>Entrar no grupo agora</span>
       </a>
-      <p class="microcopy">✓ Grátis. Para sempre. Só achados de impressão 3D.</p>
+      <ul class="microcopy">
+        <li>100% grátis, para sempre</li>
+        <li>Exclusivo para impressão 3D</li>
+        <li>Só filamentos, impressoras, peças e upgrades</li>
+      </ul>
     </div>
   </section>
 
