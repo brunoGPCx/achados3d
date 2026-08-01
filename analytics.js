@@ -63,7 +63,8 @@
   var day = saoPauloDay();
 
   function sendEvent(eventType, ctaId, groupId) {
-    var documentId = randomId();
+    var eventSuffix = eventType === "session_start" ? "session" : eventType === "page_view" ? "view" : "click";
+    var documentId = sessionId + "_" + eventSuffix;
     var body = {
       fields: {
         eventType: { stringValue: eventType },

@@ -19,19 +19,21 @@ service cloud.firestore {
           'medium', 'campaign', 'referrerHost', 'screen', 'createdAt'
         ])
         && data.keys().hasAll([
-          'eventType', 'dayType', 'ctaId', 'path', 'sessionId', 'source',
+          'eventType', 'dayType', 'ctaId', 'groupId', 'path', 'sessionId', 'source',
           'medium', 'campaign', 'referrerHost', 'screen', 'createdAt'
         ])
         && data.eventType in ['page_view', 'session_start', 'cta_click']
         && isShortString(data.dayType, 40)
         && data.dayType.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}:(page_view|session_start|cta_click)$')
         && isShortString(data.ctaId, 30)
-        && (!('groupId' in data) || isShortString(data.groupId, 64))
+        && isShortString(data.groupId, 64)
         && (
-          (data.eventType == 'cta_click' && data.ctaId in ['cta-top', 'cta-main', 'cta-final', 'cta-sticky'])
-          || (data.eventType != 'cta_click' && data.ctaId == '')
+          (data.eventType == 'cta_click'
+            && data.ctaId in ['cta-top', 'cta-main', 'cta-final', 'cta-sticky']
+            && data.groupId.matches('^[A-Za-z0-9_-]{1,64}$'))
+          || (data.eventType != 'cta_click' && data.ctaId == '' && data.groupId == '')
         )
-        && isShortString(data.path, 120)
+        && data.path in ['/', '/index.html']
         && data.sessionId is string
         && data.sessionId.matches('^[A-Za-z0-9_-]{16,64}$')
         && isShortString(data.source, 100)
@@ -39,13 +41,24 @@ service cloud.firestore {
         && isShortString(data.campaign, 100)
         && isShortString(data.referrerHost, 160)
         && isShortString(data.screen, 30)
+        && data.screen.matches('^[0-9]{2,5}x[0-9]{2,5}$')
         && data.createdAt is timestamp
         && data.createdAt >= request.time - duration.value(10, 'm')
         && data.createdAt <= request.time + duration.value(10, 'm');
     }
 
+    function isDeterministicEventId(eventId) {
+      let data = request.resource.data;
+      return eventId.matches('^[A-Za-z0-9_-]{20,64}$')
+        && (
+          (data.eventType == 'session_start' && eventId == data.sessionId + '_session')
+          || (data.eventType == 'page_view' && eventId == data.sessionId + '_view')
+          || (data.eventType == 'cta_click' && eventId == data.sessionId + '_click')
+        );
+    }
+
     match /events/{eventId} {
-      allow create: if eventId.matches('^[A-Za-z0-9_-]{16,64}$') && isValidEvent();
+      allow create: if isValidEvent() && isDeterministicEventId(eventId);
       allow read: if isAdmin();
       allow update, delete: if false;
     }

@@ -6,6 +6,8 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#05070c">
   <title>Painel administrativo — Achados 3D</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -57,6 +59,34 @@
     .metric-row:last-child { border:0; }
     .metric-row span { color:var(--muted); }
     .metric-row strong { font:800 28px/1 "Barlow Condensed",sans-serif; }
+    .period-head { display:flex; align-items:center; justify-content:space-between; gap:16px; margin:34px 0 16px; }
+    .period-head .subheading { margin:0; }
+    .period-toggle { display:flex; gap:6px; padding:4px; border:1px solid var(--line); border-radius:12px; background:#080d16; }
+    .period-toggle button { border:0; border-radius:8px; padding:7px 12px; background:transparent; color:var(--muted); font-weight:700; }
+    .period-toggle button.active { background:rgba(255,122,50,.16); color:var(--ink); }
+    .chart-surface { margin-top:14px; }
+    .chart-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; margin-bottom:18px; }
+    .chart-head h3,.insight-card h3 { font-size:23px; }
+    .chart-head p,.insight-card>p { margin:6px 0 0; color:var(--dim); font-size:13px; }
+    .chart-legend { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:12px; color:var(--muted); font-size:12px; }
+    .chart-legend span { display:flex; align-items:center; gap:6px; }
+    .legend-dot { width:8px; height:8px; border-radius:50%; background:var(--orange); }
+    .legend-dot.clicks { background:var(--green); }
+    .traffic-chart { height:230px; display:grid; grid-auto-flow:column; grid-auto-columns:minmax(28px,1fr); align-items:end; gap:7px; overflow-x:auto; padding:8px 2px 0; }
+    .chart-day { height:100%; min-width:28px; display:grid; grid-template-rows:1fr 20px; gap:7px; }
+    .chart-bars { min-height:0; display:flex; align-items:flex-end; justify-content:center; gap:3px; border-bottom:1px solid var(--line); }
+    .chart-bar { width:min(11px,42%); min-height:0; border-radius:5px 5px 1px 1px; background:linear-gradient(180deg,#ff9b3f,#ff6528); transition:height .2s ease; }
+    .chart-bar.clicks { background:linear-gradient(180deg,#5ee98f,#25d366); }
+    .chart-label { color:var(--dim); font-size:10px; text-align:center; white-space:nowrap; }
+    .insights-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:14px; }
+    .insight-card { min-width:0; }
+    .data-table { width:100%; border-collapse:collapse; margin-top:16px; font-size:13px; }
+    .data-table th { padding:0 8px 9px; color:var(--dim); font-size:10px; text-align:right; text-transform:uppercase; letter-spacing:.08em; }
+    .data-table th:first-child,.data-table td:first-child { padding-left:0; text-align:left; }
+    .data-table td { padding:11px 8px; border-top:1px solid var(--line); color:var(--muted); text-align:right; }
+    .data-table td:first-child { max-width:230px; overflow:hidden; color:var(--ink); text-overflow:ellipsis; white-space:nowrap; }
+    .data-table td:last-child { padding-right:0; font-weight:700; color:var(--green); }
+    .empty-state { margin:18px 0 0; color:var(--dim); font-size:13px; }
     .groups-toolbar { display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:15px; }
     .groups-toolbar p { margin:0; color:var(--muted); }
     .groups-list { display:grid; gap:12px; }
@@ -75,8 +105,8 @@
     .savebar { position:sticky; bottom:14px; display:flex; justify-content:space-between; align-items:center; gap:18px; margin-top:18px; padding:14px 16px; border:1px solid var(--line); border-radius:16px; background:rgba(12,17,27,.94); backdrop-filter:blur(14px); box-shadow:0 16px 40px rgba(0,0,0,.3); }
     .savebar span { color:var(--muted); font-size:14px; }
     .toast { position:fixed; right:22px; bottom:22px; z-index:20; padding:13px 17px; border-radius:12px; background:#153d2b; border:1px solid rgba(37,211,102,.3); color:#baf5ce; box-shadow:0 16px 40px rgba(0,0,0,.3); }
-    @media(max-width:850px){.group-card{grid-template-columns:68px 1fr 150px}.link-field{grid-column:2/-1}.group-actions{grid-column:2/-1}.metrics-grid{grid-template-columns:1fr}.metric{min-height:118px}}
-    @media(max-width:580px){.app{width:min(100% - 22px,1180px)}.topbar{align-items:flex-start}.account span{display:none}.section-head{align-items:flex-start;flex-direction:column}.groups-toolbar{align-items:flex-start;flex-direction:column}.group-card{grid-template-columns:1fr}.group-number,.name-field,.link-field,.status-field,.group-actions,.group-clicks{grid-column:1}.group-actions{justify-content:flex-end}.savebar{align-items:stretch;flex-direction:column}.savebar .primary{width:100%}}
+    @media(max-width:850px){.group-card{grid-template-columns:68px 1fr 150px}.link-field{grid-column:2/-1}.group-actions{grid-column:2/-1}.metrics-grid{grid-template-columns:1fr}.metric{min-height:118px}.insights-grid{grid-template-columns:1fr}}
+    @media(max-width:580px){.app{width:min(100% - 22px,1180px)}.topbar{align-items:flex-start}.account span{display:none}.section-head{align-items:flex-start;flex-direction:column}.groups-toolbar{align-items:flex-start;flex-direction:column}.group-card{grid-template-columns:1fr}.group-number,.name-field,.link-field,.status-field,.group-actions,.group-clicks{grid-column:1}.group-actions{justify-content:flex-end}.savebar{align-items:stretch;flex-direction:column}.savebar .primary{width:100%}.period-head,.chart-head{align-items:flex-start;flex-direction:column}.chart-legend{justify-content:flex-start}.traffic-chart{grid-auto-columns:34px}}
   </style>
 </head>
 <body>
@@ -111,6 +141,31 @@
           <article class="metric"><span>Visualizações</span><strong id="views-today">—</strong><small>Páginas carregadas</small></article>
           <article class="metric"><span>Pessoas que clicaram</span><strong class="green" id="clicks-today">—</strong><small id="conversion-today">Conversão: —</small></article>
         </div>
+        <div class="period-head">
+          <h2 class="subheading">Desempenho recente</h2>
+          <div class="period-toggle" aria-label="Período das métricas">
+            <button class="active" data-period="7" type="button">7 dias</button>
+            <button data-period="30" type="button">30 dias</button>
+          </div>
+        </div>
+        <div class="metrics-grid">
+          <article class="metric"><span>Pessoas no período</span><strong id="sessions-period">—</strong><small id="period-label-sessions">Últimos 7 dias</small></article>
+          <article class="metric"><span>Pessoas que clicaram</span><strong class="green" id="clicks-period">—</strong><small id="period-label-clicks">Últimos 7 dias</small></article>
+          <article class="metric"><span>Taxa de conversão</span><strong id="conversion-period">—</strong><small>Cliques ÷ pessoas</small></article>
+        </div>
+        <div class="surface chart-surface">
+          <div class="chart-head">
+            <div><h3>Visitas e cliques por dia</h3><p>Mostra quantas pessoas chegaram e quantas clicaram para entrar.</p></div>
+            <div class="chart-legend"><span><i class="legend-dot"></i>Pessoas</span><span><i class="legend-dot clicks"></i>Cliques</span></div>
+          </div>
+          <div class="traffic-chart" id="traffic-chart" aria-label="Gráfico de visitas e cliques"></div>
+        </div>
+        <div class="insights-grid">
+          <article class="surface insight-card"><h3>Campanhas</h3><p>Conversão por nome de campanha UTM.</p><div id="campaign-breakdown"></div></article>
+          <article class="surface insight-card"><h3>Origens</h3><p>De onde vieram as pessoas.</p><div id="source-breakdown"></div></article>
+          <article class="surface insight-card"><h3>Botões</h3><p>Qual posição gerou o clique no período.</p><div id="button-breakdown"></div></article>
+          <article class="surface insight-card"><h3>Grupos</h3><p>Para qual grupo os cliques foram enviados.</p><div id="group-breakdown"></div></article>
+        </div>
         <h2 class="subheading">Desde o início da coleta</h2>
         <div class="metrics-grid">
           <article class="metric"><span>Pessoas no site</span><strong id="sessions-total">—</strong><small>Sessões iniciadas</small></article>
@@ -140,7 +195,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-    import { collection, doc, getDoc, getFirestore, getCountFromServer, query, serverTimestamp, where, writeBatch } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+    import { collection, doc, getDoc, getDocs, getFirestore, getCountFromServer, query, serverTimestamp, Timestamp, where, writeBatch } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
     const ADMIN_EMAIL = "brunogarciawork@gmail.com";
     const CURRENT_LINK = "https://chat.whatsapp.com/LCn6wQS7b0a90ITmtV5JrR?s=cl&p=i&ilr=0&amv=0";
@@ -160,6 +215,8 @@
     let currentUser = null;
     let dirty = false;
     let blockedMessage = "";
+    let recentEvents = [];
+    let selectedPeriod = 7;
 
     const loginView = document.getElementById("login-view");
     const adminView = document.getElementById("admin-view");
@@ -216,11 +273,17 @@
     }
     document.querySelectorAll(".nav button").forEach(button => button.addEventListener("click", () => openTab(button.dataset.tab)));
 
-    function saoPauloDay() {
-      const parts = new Intl.DateTimeFormat("en-CA", { timeZone:"America/Sao_Paulo", year:"numeric", month:"2-digit", day:"2-digit" }).formatToParts(new Date());
+    function dayInSaoPaulo(value = new Date()) {
+      const parts = new Intl.DateTimeFormat("en-CA", { timeZone:"America/Sao_Paulo", year:"numeric", month:"2-digit", day:"2-digit" }).formatToParts(value);
       const date = {};
       parts.forEach(part => { date[part.type] = part.value; });
       return date.year + "-" + date.month + "-" + date.day;
+    }
+    function saoPauloDay() { return dayInSaoPaulo(new Date()); }
+    function periodDays(amount) {
+      const values = [];
+      for (let index = amount - 1; index >= 0; index -= 1) values.push(dayInSaoPaulo(new Date(Date.now() - index * 86400000)));
+      return values;
     }
     async function countWhere(field, value) {
       const snapshot = await getCountFromServer(query(collection(db, "events"), where(field, "==", value)));
@@ -228,6 +291,121 @@
     }
     function setNumber(id, value) { document.getElementById(id).textContent = Number(value).toLocaleString("pt-BR"); }
     function conversion(clicks, sessions) { return sessions ? ((clicks / sessions) * 100).toFixed(1).replace(".", ",") + "%" : "0%"; }
+    function eventDay(event) { return String(event.dayType || "").slice(0, 10); }
+    function uniqueEvents(events, type) {
+      const values = new Map();
+      events.forEach(event => {
+        if (event.eventType === type && event.sessionId && !values.has(event.sessionId)) values.set(event.sessionId, event);
+      });
+      return [...values.values()];
+    }
+    function cleanMetricLabel(value, fallback) {
+      const label = String(value || "").trim();
+      return label ? label.slice(0, 80) : fallback;
+    }
+    function renderTrafficChart(days, events) {
+      const chart = document.getElementById("traffic-chart");
+      chart.textContent = "";
+      const points = days.map(day => {
+        const daily = events.filter(event => eventDay(event) === day);
+        return { day, sessions:uniqueEvents(daily, "session_start").length, clicks:uniqueEvents(daily, "cta_click").length };
+      });
+      const maximum = Math.max(1, ...points.flatMap(point => [point.sessions, point.clicks]));
+      points.forEach((point, index) => {
+        const column = document.createElement("div");
+        column.className = "chart-day";
+        const bars = document.createElement("div");
+        bars.className = "chart-bars";
+        const visits = document.createElement("i");
+        visits.className = "chart-bar";
+        visits.style.height = point.sessions ? Math.max(4, point.sessions / maximum * 100) + "%" : "0";
+        visits.title = point.sessions + " pessoa(s) em " + point.day;
+        const clicks = document.createElement("i");
+        clicks.className = "chart-bar clicks";
+        clicks.style.height = point.clicks ? Math.max(4, point.clicks / maximum * 100) + "%" : "0";
+        clicks.title = point.clicks + " clique(s) em " + point.day;
+        bars.append(visits, clicks);
+        const label = document.createElement("span");
+        label.className = "chart-label";
+        label.textContent = days.length <= 7 || index % 5 === 0 || index === days.length - 1 ? point.day.slice(8) + "/" + point.day.slice(5, 7) : "";
+        column.append(bars, label);
+        chart.appendChild(column);
+      });
+    }
+    function renderBreakdown(containerId, rows, detailed = true) {
+      const container = document.getElementById(containerId);
+      container.textContent = "";
+      if (!rows.length) {
+        const empty = document.createElement("p");
+        empty.className = "empty-state";
+        empty.textContent = "Ainda não há dados neste período.";
+        container.appendChild(empty);
+        return;
+      }
+      const table = document.createElement("table");
+      table.className = "data-table";
+      const head = document.createElement("thead");
+      const headRow = document.createElement("tr");
+      const headings = detailed ? ["Nome", "Pessoas", "Cliques", "Conv."] : ["Nome", "Cliques"];
+      headings.forEach(value => { const cell = document.createElement("th"); cell.textContent = value; headRow.appendChild(cell); });
+      head.appendChild(headRow);
+      const body = document.createElement("tbody");
+      rows.slice(0, 8).forEach(row => {
+        const line = document.createElement("tr");
+        const values = detailed ? [row.label, row.sessions, row.clicks, conversion(row.clicks, row.sessions)] : [row.label, row.clicks];
+        values.forEach(value => { const cell = document.createElement("td"); cell.textContent = typeof value === "number" ? value.toLocaleString("pt-BR") : value; line.appendChild(cell); });
+        body.appendChild(line);
+      });
+      table.append(head, body);
+      container.appendChild(table);
+    }
+    function dimensionRows(sessions, clickedSessions, getLabel) {
+      const values = new Map();
+      sessions.forEach(event => {
+        const label = getLabel(event);
+        if (!values.has(label)) values.set(label, { label, sessions:0, clicks:0 });
+        const row = values.get(label);
+        row.sessions += 1;
+        if (clickedSessions.has(event.sessionId)) row.clicks += 1;
+      });
+      return [...values.values()].sort((a,b) => b.sessions - a.sessions || b.clicks - a.clicks);
+    }
+    function clickRows(clicks, getLabel) {
+      const values = new Map();
+      clicks.forEach(event => {
+        const label = getLabel(event);
+        if (!values.has(label)) values.set(label, { label, clicks:0 });
+        values.get(label).clicks += 1;
+      });
+      return [...values.values()].sort((a,b) => b.clicks - a.clicks);
+    }
+    function renderRecentMetrics() {
+      const days = periodDays(selectedPeriod);
+      const allowedDays = new Set(days);
+      const events = recentEvents.filter(event => allowedDays.has(eventDay(event)));
+      const sessions = uniqueEvents(events, "session_start");
+      const clicks = uniqueEvents(events, "cta_click");
+      const clickedSessions = new Set(clicks.map(event => event.sessionId));
+      setNumber("sessions-period", sessions.length);
+      setNumber("clicks-period", clicks.length);
+      document.getElementById("conversion-period").textContent = conversion(clicks.length, sessions.length);
+      document.getElementById("period-label-sessions").textContent = "Últimos " + selectedPeriod + " dias";
+      document.getElementById("period-label-clicks").textContent = "Últimos " + selectedPeriod + " dias";
+      renderTrafficChart(days, events);
+      renderBreakdown("campaign-breakdown", dimensionRows(sessions, clickedSessions, event => cleanMetricLabel(event.campaign, "Sem campanha UTM")));
+      renderBreakdown("source-breakdown", dimensionRows(sessions, clickedSessions, event => {
+        const source = cleanMetricLabel(event.source, "");
+        const medium = cleanMetricLabel(event.medium, "");
+        if (source || medium) return [source || "Sem origem", medium].filter(Boolean).join(" / ");
+        return cleanMetricLabel(event.referrerHost, "Acesso direto");
+      }));
+      const buttonNames = { "cta-top":"Botão do topo", "cta-main":"Botão principal", "cta-final":"Botão final", "cta-sticky":"Botão fixo no celular" };
+      renderBreakdown("button-breakdown", clickRows(clicks, event => buttonNames[event.ctaId] || cleanMetricLabel(event.ctaId, "Outro botão")), false);
+      renderBreakdown("group-breakdown", clickRows(clicks, event => {
+        const group = groups.find(item => item.id === event.groupId);
+        return group ? group.name : cleanMetricLabel(event.groupId, "Grupo não identificado");
+      }), false);
+    }
     async function loadMetrics() {
       const status = document.getElementById("metrics-status");
       const button = document.getElementById("refresh-metrics");
@@ -236,16 +414,22 @@
       status.textContent = "Atualizando...";
       button.disabled = true;
       try {
-        const numbers = await Promise.all([
-          countWhere("dayType", day + ":session_start"), countWhere("dayType", day + ":page_view"), countWhere("dayType", day + ":cta_click"),
-          countWhere("eventType", "session_start"), countWhere("eventType", "page_view"), countWhere("eventType", "cta_click"),
-          countWhere("ctaId", "cta-top"), countWhere("ctaId", "cta-main"), countWhere("ctaId", "cta-final"), countWhere("ctaId", "cta-sticky")
+        const start = Timestamp.fromDate(new Date(Date.now() - 31 * 86400000));
+        const [numbers, recentSnapshot] = await Promise.all([
+          Promise.all([
+            countWhere("dayType", day + ":session_start"), countWhere("dayType", day + ":page_view"), countWhere("dayType", day + ":cta_click"),
+            countWhere("eventType", "session_start"), countWhere("eventType", "page_view"), countWhere("eventType", "cta_click"),
+            countWhere("ctaId", "cta-top"), countWhere("ctaId", "cta-main"), countWhere("ctaId", "cta-final"), countWhere("ctaId", "cta-sticky")
+          ]),
+          getDocs(query(collection(db, "events"), where("createdAt", ">=", start)))
         ]);
+        recentEvents = recentSnapshot.docs.map(item => item.data());
         setNumber("sessions-today", numbers[0]); setNumber("views-today", numbers[1]); setNumber("clicks-today", numbers[2]);
         document.getElementById("conversion-today").textContent = "Conversão: " + conversion(numbers[2], numbers[0]);
         setNumber("sessions-total", numbers[3]); setNumber("views-total", numbers[4]); setNumber("clicks-total", numbers[5]);
         document.getElementById("conversion-total").textContent = "Conversão: " + conversion(numbers[5], numbers[3]);
         setNumber("cta-top-count", numbers[6]); setNumber("cta-main-count", numbers[7]); setNumber("cta-final-count", numbers[8]); setNumber("cta-sticky-count", numbers[9]);
+        renderRecentMetrics();
         status.textContent = "Atualizado agora, no horário de Brasília.";
       } catch (_) {
         status.className = "status-line error";
@@ -253,6 +437,11 @@
       } finally { button.disabled = false; }
     }
     document.getElementById("refresh-metrics").addEventListener("click", loadMetrics);
+    document.querySelectorAll("[data-period]").forEach(button => button.addEventListener("click", () => {
+      selectedPeriod = Number(button.dataset.period) === 30 ? 30 : 7;
+      document.querySelectorAll("[data-period]").forEach(item => item.classList.toggle("active", item === button));
+      renderRecentMetrics();
+    }));
 
     function defaultGroups() { return [{ id:"grupo-1", name:"Grupo 1", url:CURRENT_LINK, status:"active", order:0 }]; }
     function newId() { return "grupo-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8); }
@@ -271,6 +460,7 @@
         status.textContent = groups.some(group => group.status === "active" && validLink(group.url)) ? "O primeiro grupo ativo da lista está recebendo os cliques." : "Nenhum grupo ativo: os botões do site serão temporariamente desabilitados.";
         clearDirty();
         loadGroupClickCounts();
+        if (recentEvents.length) renderRecentMetrics();
       } catch (_) {
         status.className = "status-line error";
         status.textContent = "Não foi possível carregar os grupos.";
