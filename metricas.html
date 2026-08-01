@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Métricas — Achados 3D</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: dark; --bg:#05070c; --panel:#0c111b; --ink:#f3f6fa; --muted:#93a3b8; --line:rgba(255,255,255,.09); --orange:#ff7a32; --green:#25d366; }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; background:radial-gradient(circle at 50% -20%, rgba(255,122,50,.16), transparent 40%),var(--bg); color:var(--ink); font-family:"Barlow",system-ui,sans-serif; }
+    main { width:min(1050px,calc(100% - 32px)); margin:0 auto; padding:42px 0 64px; }
+    header { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:28px; }
+    .eyebrow { margin:0 0 5px; color:var(--orange); text-transform:uppercase; letter-spacing:.2em; font-size:12px; font-weight:800; }
+    h1,h2 { margin:0; font-family:"Barlow Condensed",sans-serif; text-transform:uppercase; line-height:.95; }
+    h1 { font-size:clamp(42px,7vw,72px); }
+    h2 { font-size:28px; margin-bottom:16px; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; }
+    button,a.button { appearance:none; border:1px solid var(--line); border-radius:999px; background:#111827; color:var(--ink); padding:11px 17px; font:700 14px "Barlow",sans-serif; cursor:pointer; text-decoration:none; }
+    button:hover,a.button:hover { border-color:rgba(255,122,50,.55); }
+    .status { min-height:24px; color:var(--muted); margin:0 0 18px; }
+    .status.error { color:#ff8f8f; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .card,.panel { background:linear-gradient(145deg,rgba(17,24,39,.96),rgba(8,12,20,.96)); border:1px solid var(--line); border-radius:20px; }
+    .card { padding:22px; min-height:142px; display:flex; flex-direction:column; justify-content:space-between; }
+    .card .label { color:var(--muted); font-size:14px; font-weight:600; }
+    .card strong { font-family:"Barlow Condensed",sans-serif; font-size:52px; line-height:1; }
+    .card strong.green { color:var(--green); }
+    .card small { color:#69778c; }
+    .section-title { margin-top:34px; }
+    .panel { padding:22px; }
+    .row { display:grid; grid-template-columns:1fr auto; gap:14px; align-items:center; padding:15px 0; border-bottom:1px solid var(--line); }
+    .row:last-child { border-bottom:0; }
+    .row span { color:var(--muted); }
+    .row strong { font-family:"Barlow Condensed",sans-serif; font-size:28px; }
+    .note { margin:18px 0 0; color:#64748b; font-size:13px; }
+    @media (max-width:720px) { header{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:1fr}.card{min-height:118px} }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <p class="eyebrow">Painel gratuito</p>
+        <h1>Métricas Achados 3D</h1>
+      </div>
+      <div class="actions">
+        <a class="button" href="/">Ver site</a>
+        <button id="refresh" type="button">Atualizar</button>
+      </div>
+    </header>
+
+    <p class="status" id="status">Carregando os números...</p>
+
+    <h2>Hoje</h2>
+    <section class="grid" aria-label="Métricas de hoje">
+      <article class="card"><span class="label">Pessoas no site</span><strong id="sessions-today">—</strong><small>Sessões iniciadas</small></article>
+      <article class="card"><span class="label">Visualizações</span><strong id="views-today">—</strong><small>Páginas carregadas</small></article>
+      <article class="card"><span class="label">Pessoas que clicaram</span><strong class="green" id="clicks-today">—</strong><small id="conversion-today">Conversão: —</small></article>
+    </section>
+
+    <h2 class="section-title">Desde o início da coleta</h2>
+    <section class="grid" aria-label="Métricas totais">
+      <article class="card"><span class="label">Pessoas no site</span><strong id="sessions-total">—</strong><small>Sessões iniciadas</small></article>
+      <article class="card"><span class="label">Visualizações</span><strong id="views-total">—</strong><small>Páginas carregadas</small></article>
+      <article class="card"><span class="label">Pessoas que clicaram</span><strong class="green" id="clicks-total">—</strong><small id="conversion-total">Conversão: —</small></article>
+    </section>
+
+    <h2 class="section-title">Botões que geraram o clique</h2>
+    <section class="panel">
+      <div class="row"><span>Botão do topo</span><strong id="cta-top">—</strong></div>
+      <div class="row"><span>Botão principal</span><strong id="cta-main">—</strong></div>
+      <div class="row"><span>Botão final</span><strong id="cta-final">—</strong></div>
+      <div class="row"><span>Botão fixo no celular</span><strong id="cta-sticky">—</strong></div>
+    </section>
+    <p class="note">Os números começam a contar depois da publicação deste painel. Nenhum nome, telefone ou mensagem do WhatsApp é armazenado.</p>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+      var PROJECT_ID = "achados3d-metricas-bruno";
+      var API_KEY = "AIzaSyDiEAA8o0X9JghlJgJuao0icYbEeZ0sjf8";
+      var QUERY_URL = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID +
+        "/databases/(default)/documents:runAggregationQuery?key=" + encodeURIComponent(API_KEY);
+
+      function saoPauloDay() {
+        var parts = new Intl.DateTimeFormat("en-CA", { timeZone:"America/Sao_Paulo", year:"numeric", month:"2-digit", day:"2-digit" }).formatToParts(new Date());
+        var date = {};
+        parts.forEach(function (part) { date[part.type] = part.value; });
+        return date.year + "-" + date.month + "-" + date.day;
+      }
+
+      function countWhere(fieldPath, value) {
+        return fetch(QUERY_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "omit",
+          body: JSON.stringify({
+            structuredAggregationQuery: {
+              aggregations: [{ alias: "total", count: {} }],
+              structuredQuery: {
+                from: [{ collectionId: "events" }],
+                where: { fieldFilter: { field: { fieldPath: fieldPath }, op: "EQUAL", value: { stringValue: value } } }
+              }
+            }
+          })
+        }).then(function (response) {
+          if (!response.ok) throw new Error("HTTP " + response.status);
+          return response.json();
+        }).then(function (items) {
+          var item = items.find(function (entry) { return entry.result && entry.result.aggregateFields; });
+          return item ? Number(item.result.aggregateFields.total.integerValue || 0) : 0;
+        });
+      }
+
+      function setText(id, value) { document.getElementById(id).textContent = value.toLocaleString("pt-BR"); }
+      function conversion(clicks, sessions) { return sessions ? ((clicks / sessions) * 100).toFixed(1).replace(".", ",") + "%" : "0%"; }
+
+      function load() {
+        var status = document.getElementById("status");
+        var button = document.getElementById("refresh");
+        var day = saoPauloDay();
+        status.className = "status";
+        status.textContent = "Atualizando...";
+        button.disabled = true;
+
+        Promise.all([
+          countWhere("dayType", day + ":session_start"),
+          countWhere("dayType", day + ":page_view"),
+          countWhere("dayType", day + ":cta_click"),
+          countWhere("eventType", "session_start"),
+          countWhere("eventType", "page_view"),
+          countWhere("eventType", "cta_click"),
+          countWhere("ctaId", "cta-top"),
+          countWhere("ctaId", "cta-main"),
+          countWhere("ctaId", "cta-final"),
+          countWhere("ctaId", "cta-sticky")
+        ]).then(function (numbers) {
+          setText("sessions-today", numbers[0]);
+          setText("views-today", numbers[1]);
+          setText("clicks-today", numbers[2]);
+          document.getElementById("conversion-today").textContent = "Conversão: " + conversion(numbers[2], numbers[0]);
+          setText("sessions-total", numbers[3]);
+          setText("views-total", numbers[4]);
+          setText("clicks-total", numbers[5]);
+          document.getElementById("conversion-total").textContent = "Conversão: " + conversion(numbers[5], numbers[3]);
+          setText("cta-top", numbers[6]);
+          setText("cta-main", numbers[7]);
+          setText("cta-final", numbers[8]);
+          setText("cta-sticky", numbers[9]);
+          status.textContent = "Atualizado agora, no horário de Brasília.";
+        }).catch(function () {
+          status.className = "status error";
+          status.textContent = "Não foi possível carregar agora. Tente atualizar novamente.";
+        }).finally(function () {
+          button.disabled = false;
+        });
+      }
+
+      document.getElementById("refresh").addEventListener("click", load);
+      load();
+    })();
+  </script>
+</body>
+</html>

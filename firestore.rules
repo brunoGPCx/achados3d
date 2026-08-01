@@ -1,0 +1,50 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isShortString(value, maxLength) {
+      return value is string && value.size() <= maxLength;
+    }
+
+    function isValidEvent() {
+      let data = request.resource.data;
+      return data.keys().hasOnly([
+          'eventType', 'dayType', 'ctaId', 'path', 'sessionId', 'source',
+          'medium', 'campaign', 'referrerHost', 'screen', 'createdAt'
+        ])
+        && data.keys().hasAll([
+          'eventType', 'dayType', 'ctaId', 'path', 'sessionId', 'source',
+          'medium', 'campaign', 'referrerHost', 'screen', 'createdAt'
+        ])
+        && data.eventType in ['page_view', 'session_start', 'cta_click']
+        && isShortString(data.dayType, 40)
+        && data.dayType.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}:(page_view|session_start|cta_click)$')
+        && isShortString(data.ctaId, 30)
+        && (
+          (data.eventType == 'cta_click' && data.ctaId in ['cta-top', 'cta-main', 'cta-final', 'cta-sticky'])
+          || (data.eventType != 'cta_click' && data.ctaId == '')
+        )
+        && isShortString(data.path, 120)
+        && data.sessionId is string
+        && data.sessionId.matches('^[A-Za-z0-9_-]{16,64}$')
+        && isShortString(data.source, 100)
+        && isShortString(data.medium, 100)
+        && isShortString(data.campaign, 100)
+        && isShortString(data.referrerHost, 160)
+        && isShortString(data.screen, 30)
+        && data.createdAt is timestamp
+        && data.createdAt >= request.time - duration.value(10, 'm')
+        && data.createdAt <= request.time + duration.value(10, 'm');
+    }
+
+    match /events/{eventId} {
+      allow create: if eventId.matches('^[A-Za-z0-9_-]{16,64}$') && isValidEvent();
+      allow read: if true;
+      allow update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
