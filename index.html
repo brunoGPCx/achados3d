@@ -203,27 +203,42 @@
   /* ---------- whatsapp preview ---------- */
   .chat-mock {
     max-width: 420px; margin: 0 auto;
-    background: var(--bg-panel-2); border: 1px solid var(--line-strong);
-    border-radius: 22px; padding: 18px 16px 20px;
+    background: #0b141a; border: 1px solid var(--line-strong);
+    border-radius: 22px; padding: 16px 14px 18px;
     box-shadow: 0 30px 70px -30px rgba(0,0,0,.7);
   }
   .chat-mock .chat-head { display: flex; align-items: center; gap: 10px; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
   .chat-mock .chat-head .av { width: 34px; height: 34px; border-radius: 50%; background: var(--accent-grad); display: grid; place-items: center; font-size: 15px; }
   .chat-mock .chat-head b { font-size: 14.5px; }
   .chat-mock .chat-head span { display: block; font-size: 11.5px; color: var(--muted); }
-  .bubble {
-    background: #1f3327; border: 1px solid rgba(37,211,102,.18);
-    border-radius: 12px 12px 12px 2px;
-    padding: 10px 12px; font-size: 14px; color: #e7f7ec;
-    margin-bottom: 10px; max-width: 92%;
-  }
-  .bubble .time { display: block; text-align: right; font-size: 10.5px; color: #8fbf9e; margin-top: 4px; }
   .example-tag {
     display: inline-block; margin-bottom: 12px;
     font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
     color: var(--accent-2); background: rgba(255,138,61,.1); border: 1px solid rgba(255,138,61,.3);
     padding: 4px 10px; border-radius: 100px;
   }
+
+  .promo-card {
+    background: #111b21; border: 1px solid rgba(255,255,255,.08);
+    border-radius: 14px 14px 4px 14px; overflow: hidden;
+    max-width: 94%;
+  }
+  .promo-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+  .promo-body { padding: 12px 13px 10px; }
+  .promo-banner {
+    text-align: center; font-weight: 800; font-size: 13px; letter-spacing: 0.01em;
+    color: var(--accent-2); text-transform: uppercase; margin: 0 0 8px;
+  }
+  .promo-title { font-size: 14px; color: #e9edef; margin: 0 0 8px; font-weight: 600; }
+  .price-line { font-size: 13.5px; margin: 3px 0; display: flex; gap: 6px; }
+  .price-line.old { color: #8696a0; text-decoration: line-through; }
+  .price-line.new { color: #6ee89a; font-weight: 700; }
+  .price-line.pix { color: #ffd479; font-weight: 600; }
+  .promo-links { margin: 9px 0 0; }
+  .promo-links div { font-size: 13px; margin: 3px 0; }
+  .promo-links a { color: #53bdeb; text-decoration: underline; }
+  .promo-disclaimer { margin: 9px 0 0; font-size: 11.5px; color: #8696a0; }
+  .promo-time { text-align: right; font-size: 10.5px; color: #8696a0; margin-top: 6px; padding-right: 2px; }
 
   /* ---------- store strip ---------- */
   .stores { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
@@ -350,9 +365,21 @@
         <div class="av">🖨️</div>
         <div><b>Achados 3D</b><span>grupo · você e outros participantes</span></div>
       </div>
-      <div class="bubble">🧵 Achado do dia: filamento PLA com cupom extra na Shopee 👉 <u>link no grupo</u><span class="time">09:14 ✓✓</span></div>
-      <div class="bubble">⚡ Promoção relâmpago: impressora com o preço mais baixo do mês 👉 <u>link no grupo</u><span class="time">13:02 ✓✓</span></div>
-      <div class="bubble">🔧 Kit de bicos + hotend com frete grátis 👉 <u>link no grupo</u><span class="time">18:47 ✓✓</span></div>
+      <div class="promo-card">
+        <img src="https://images.unsplash.com/photo-1742971239045-afabc9f7d744?fm=jpg&amp;q=70&amp;w=700&amp;auto=format&amp;fit=crop" alt="Filamento 3D colorido" loading="lazy" />
+        <div class="promo-body">
+          <p class="promo-banner">🚀 * confere enquanto tem * 🚀</p>
+          <p class="promo-title">🛍️ Kit Hotend + Bicos (aço endurecido, com silicone)</p>
+          <div class="price-line old">❌ De R$ 177,00</div>
+          <div class="price-line new">✅ Por R$ 55,00</div>
+          <div class="promo-links">
+            <div>Resgate aqui seu cupom: <a href="#" onclick="return false;">shopee.com.br/••••••</a></div>
+            <div>🛒 Compre aqui 👉 <a href="#" onclick="return false;">shopee.com.br/••••••</a></div>
+          </div>
+          <p class="promo-disclaimer">⚠️ Promoção sujeita à alteração de preço e estoque do site</p>
+        </div>
+      </div>
+      <p class="promo-time">18:20 ✓✓</p>
     </div>
   </section>
 
