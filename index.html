@@ -25,26 +25,20 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<!--
-  TRACKING (opcional): cole seus IDs abaixo para medir conversão do tráfego pago.
-  O clique nos botões já dispara os eventos automaticamente quando os pixels existirem.
-
-  Meta Pixel:
-  <script>
-    !function(f,b,e,v,n,t,s){...}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', 'SEU_PIXEL_ID');
-    fbq('track', 'PageView');
-  </script>
-
-  Google Ads / GA4:
-  <script async src="https://www.googletagmanager.com/gtag/js?id=SEU_ID"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'SEU_ID');
-  </script>
--->
+<!-- Meta Pixel Code -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window,document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init','905242675437541');
+  fbq('track','PageView');
+</script>
+<!-- End Meta Pixel Code -->
 
 <style>
   :root {
@@ -309,6 +303,7 @@
   }
 </style>
 
+<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=905242675437541&amp;ev=PageView&amp;noscript=1"></noscript>
 <canvas id="bed" aria-hidden="true"></canvas>
 <div class="glow glow--top" aria-hidden="true"></div>
 <div class="glow glow--bottom" aria-hidden="true"></div>
