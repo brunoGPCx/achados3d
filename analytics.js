@@ -3,8 +3,10 @@
 
   var PROJECT_ID = "achados3d-metricas-bruno";
   var API_KEY = "AIzaSyDiEAA8o0X9JghlJgJuao0icYbEeZ0sjf8";
-  var EVENTS_URL = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID +
-    "/databases/(default)/documents/events";
+  var DATABASE_ROOT = "projects/" + PROJECT_ID + "/databases/(default)/documents/";
+  var EVENTS_URL = "https://firestore.googleapis.com/v1/" + DATABASE_ROOT + "events";
+  var COMMIT_URL = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID +
+    "/databases/(default)/documents:commit";
   var SESSION_KEY = "achados3d_analytics_session";
   var STARTED_KEY = "achados3d_analytics_started";
   var CLICKED_KEY = "achados3d_analytics_clicked";
@@ -62,25 +64,27 @@
   var search = new URLSearchParams(window.location.search);
   var day = saoPauloDay();
 
+  function eventFields(eventType, ctaId, groupId, createdAt) {
+    return {
+      eventType: { stringValue: eventType },
+      dayType: { stringValue: day + ":" + eventType },
+      ctaId: { stringValue: clean(ctaId, 30) },
+      groupId: { stringValue: clean(groupId, 64) },
+      path: { stringValue: clean(window.location.pathname, 120) },
+      sessionId: { stringValue: sessionId },
+      source: { stringValue: clean(search.get("utm_source"), 100) },
+      medium: { stringValue: clean(search.get("utm_medium"), 100) },
+      campaign: { stringValue: clean(search.get("utm_campaign"), 100) },
+      referrerHost: { stringValue: clean(referrerHost(), 160) },
+      screen: { stringValue: clean(window.screen.width + "x" + window.screen.height, 30) },
+      createdAt: { timestampValue: createdAt || new Date().toISOString() }
+    };
+  }
+
   function sendEvent(eventType, ctaId, groupId) {
     var eventSuffix = eventType === "session_start" ? "session" : eventType === "page_view" ? "view" : "click";
     var documentId = sessionId + "_" + eventSuffix;
-    var body = {
-      fields: {
-        eventType: { stringValue: eventType },
-        dayType: { stringValue: day + ":" + eventType },
-        ctaId: { stringValue: clean(ctaId, 30) },
-        groupId: { stringValue: clean(groupId, 64) },
-        path: { stringValue: clean(window.location.pathname, 120) },
-        sessionId: { stringValue: sessionId },
-        source: { stringValue: clean(search.get("utm_source"), 100) },
-        medium: { stringValue: clean(search.get("utm_medium"), 100) },
-        campaign: { stringValue: clean(search.get("utm_campaign"), 100) },
-        referrerHost: { stringValue: clean(referrerHost(), 160) },
-        screen: { stringValue: clean(window.screen.width + "x" + window.screen.height, 30) },
-        createdAt: { timestampValue: new Date().toISOString() }
-      }
-    };
+    var body = { fields: eventFields(eventType, ctaId, groupId) };
 
     return fetch(EVENTS_URL + "?documentId=" + encodeURIComponent(documentId) + "&key=" + encodeURIComponent(API_KEY), {
       method: "POST",
@@ -89,23 +93,64 @@
       keepalive: true,
       mode: "cors",
       credentials: "omit"
+    });
+  }
+
+  function sendCountedClick(ctaId, groupId) {
+    var eventId = sessionId + "_click";
+    var eventName = DATABASE_ROOT + "events/" + eventId;
+    var counterName = DATABASE_ROOT + "routingCounters/" + groupId;
+    var body = {
+      writes: [
+        {
+          update: { name: eventName, fields: eventFields("cta_click", ctaId, groupId) },
+          currentDocument: { exists: false }
+        },
+        {
+          update: {
+            name: counterName,
+            fields: { lastEventId: { stringValue: eventId } }
+          },
+          updateMask: { fieldPaths: ["lastEventId"] },
+          updateTransforms: [
+            { fieldPath: "clicks", increment: { integerValue: "1" } },
+            { fieldPath: "updatedAt", setToServerValue: "REQUEST_TIME" }
+          ],
+          currentDocument: { exists: true }
+        }
+      ]
+    };
+
+    return fetch(COMMIT_URL + "?key=" + encodeURIComponent(API_KEY), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      keepalive: true,
+      mode: "cors",
+      credentials: "omit"
+    }).then(function (response) {
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      return response;
     }).catch(function () {
-      // Analytics must never interfere with the page or the WhatsApp button.
+      // Preserve the click metric if the automatic counter is temporarily unavailable.
+      return sendEvent("cta_click", ctaId, groupId).catch(function () { /* no-op */ });
     });
   }
 
   if (!storageGet(STARTED_KEY)) {
     storageSet(STARTED_KEY, "1");
-    sendEvent("session_start", "", "");
+    sendEvent("session_start", "", "").catch(function () { /* no-op */ });
   }
-  sendEvent("page_view", "", "");
+  sendEvent("page_view", "", "").catch(function () { /* no-op */ });
 
   var buttons = document.querySelectorAll("#cta-top, #cta-main, #cta-final, #cta-sticky");
   buttons.forEach(function (button) {
     button.addEventListener("click", function () {
-      if (storageGet(CLICKED_KEY)) return;
+      if (button.getAttribute("aria-disabled") === "true" || storageGet(CLICKED_KEY)) return;
       storageSet(CLICKED_KEY, "1");
-      sendEvent("cta_click", button.id, button.dataset.groupId || "grupo-1");
+      var groupId = button.dataset.groupId || "grupo-1";
+      if (button.dataset.autoCounter === "1") sendCountedClick(button.id, groupId);
+      else sendEvent("cta_click", button.id, groupId).catch(function () { /* no-op */ });
     });
   });
 })();

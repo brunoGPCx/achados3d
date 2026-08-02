@@ -106,6 +106,7 @@
     .group-number strong { display:block; font:800 25px/1 "Barlow Condensed",sans-serif; color:var(--orange); }
     .group-number small { color:var(--dim); }
     .receiving-badge { display:inline-block; margin-top:7px; padding:4px 7px; border-radius:999px; background:rgba(37,211,102,.1); color:#8bf0ae !important; font-size:9px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+    .receiving-badge.estimated { background:rgba(251,191,36,.1); color:#ffd86b !important; }
     label { display:block; color:var(--muted); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
     input,select { width:100%; margin-top:7px; padding:11px 12px; border:1px solid var(--line); border-radius:11px; outline:0; background:#080d16; color:var(--ink); }
     input:focus,select:focus { border-color:rgba(255,122,50,.65); box-shadow:0 0 0 3px rgba(255,122,50,.1); }
@@ -116,11 +117,17 @@
     .quick-full { height:39px; padding:0 10px; border:1px solid rgba(251,191,36,.25); border-radius:10px; background:rgba(251,191,36,.08); color:#ffd86b; font-size:11px; font-weight:800; text-transform:uppercase; }
     .quick-full:hover { border-color:rgba(251,191,36,.55); }
     .group-clicks { grid-column:2/-1; color:var(--dim); font-size:13px; }
+    .auto-routing { grid-column:2/-1; display:grid; grid-template-columns:150px 150px minmax(220px,1fr); gap:12px; align-items:end; padding-top:12px; border-top:1px solid var(--line); }
+    .auto-routing .auto-toggle { display:flex; align-items:center; gap:9px; min-height:42px; padding:0 12px; border:1px solid var(--line); border-radius:11px; background:#080d16; color:var(--muted); font-size:12px; text-transform:none; letter-spacing:0; }
+    .auto-routing .auto-toggle input { width:17px; height:17px; margin:0; padding:0; accent-color:var(--green); }
+    .auto-estimate { grid-column:1/-1; align-self:center; color:var(--muted); font-size:13px; }
+    .auto-estimate strong { color:var(--ink); }
+    .auto-estimate.full strong { color:#ffd86b; }
     .savebar { position:sticky; bottom:14px; display:flex; justify-content:space-between; align-items:center; gap:18px; margin-top:18px; padding:14px 16px; border:1px solid var(--line); border-radius:16px; background:rgba(12,17,27,.94); backdrop-filter:blur(14px); box-shadow:0 16px 40px rgba(0,0,0,.3); }
     .savebar span { color:var(--muted); font-size:14px; }
     .toast { position:fixed; right:22px; bottom:22px; z-index:20; padding:13px 17px; border-radius:12px; background:#153d2b; border:1px solid rgba(37,211,102,.3); color:#baf5ce; box-shadow:0 16px 40px rgba(0,0,0,.3); }
-    @media(max-width:850px){.group-card{grid-template-columns:68px 1fr 150px}.link-field{grid-column:2/-1}.group-actions{grid-column:2/-1}.metrics-grid{grid-template-columns:1fr}.metric{min-height:118px}.insights-grid{grid-template-columns:1fr}}
-    @media(max-width:580px){.app{width:min(100% - 22px,1180px)}.topbar{align-items:flex-start}.account span{display:none}.section-head{align-items:flex-start;flex-direction:column}.groups-toolbar{align-items:flex-start;flex-direction:column}.group-safety{align-items:stretch;flex-direction:column}.history-control{align-items:stretch;flex-direction:column}.history-control small{text-align:left}.group-card{grid-template-columns:1fr}.group-number,.name-field,.link-field,.status-field,.group-actions,.group-clicks{grid-column:1}.group-actions{justify-content:flex-end;flex-wrap:wrap}.savebar{align-items:stretch;flex-direction:column}.savebar .primary{width:100%}.period-head,.chart-head{align-items:flex-start;flex-direction:column}.chart-legend{justify-content:flex-start}.traffic-chart{grid-auto-columns:34px}}
+    @media(max-width:850px){.group-card{grid-template-columns:68px 1fr 150px}.link-field{grid-column:2/-1}.group-actions{grid-column:2/-1}.auto-routing{grid-template-columns:1fr 1fr}.auto-estimate{grid-column:1/-1}.metrics-grid{grid-template-columns:1fr}.metric{min-height:118px}.insights-grid{grid-template-columns:1fr}}
+    @media(max-width:580px){.app{width:min(100% - 22px,1180px)}.topbar{align-items:flex-start}.account span{display:none}.section-head{align-items:flex-start;flex-direction:column}.groups-toolbar{align-items:flex-start;flex-direction:column}.group-safety{align-items:stretch;flex-direction:column}.history-control{align-items:stretch;flex-direction:column}.history-control small{text-align:left}.group-card{grid-template-columns:1fr}.group-number,.name-field,.link-field,.status-field,.group-actions,.group-clicks,.auto-routing{grid-column:1}.auto-routing{grid-template-columns:1fr}.auto-estimate{grid-column:1}.group-actions{justify-content:flex-end;flex-wrap:wrap}.savebar{align-items:stretch;flex-direction:column}.savebar .primary{width:100%}.period-head,.chart-head{align-items:flex-start;flex-direction:column}.chart-legend{justify-content:flex-start}.traffic-chart{grid-auto-columns:34px}}
   </style>
 </head>
 <body>
@@ -237,6 +244,7 @@
     let selectedPeriod = 7;
     let groupHistory = [];
     let lastSavedGroups = [];
+    let routeCounters = {};
 
     const loginView = document.getElementById("login-view");
     const adminView = document.getElementById("admin-view");
@@ -463,11 +471,15 @@
       renderRecentMetrics();
     }));
 
-    function defaultGroups() { return [{ id:"grupo-1", name:"Grupo 1", url:CURRENT_LINK, status:"active", order:0 }]; }
+    function defaultGroups() { return [{ id:"grupo-1", name:"Grupo 1", url:CURRENT_LINK, status:"active", order:0, autoRoute:true, baselineMembers:0, switchAt:990, routeRevision:newId() }]; }
     function newId() { return "grupo-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8); }
     function validLink(value) { try { const url = new URL(value); return url.protocol === "https:" && url.hostname === "chat.whatsapp.com" && url.pathname.length > 2; } catch (_) { return false; } }
     function cloneGroups(value) { return JSON.parse(JSON.stringify(Array.isArray(value) ? value : [])); }
-    function activeGroupFrom(value) { return (Array.isArray(value) ? value : []).find(group => group.status === "active" && validLink(group.url)); }
+    function wholeNumber(value, fallback = 0) { const number = Number(value); return Number.isFinite(number) ? Math.max(0, Math.round(number)) : fallback; }
+    function groupCounter(group) { return group && routeCounters[group.id] ? routeCounters[group.id] : null; }
+    function estimatedMembers(group) { const counter = groupCounter(group); return wholeNumber(group.baselineMembers, counter ? wholeNumber(counter.baselineMembers) : 0) + (counter ? wholeNumber(counter.clicks) : 0); }
+    function isEstimatedFull(group) { return Boolean(group && group.autoRoute !== false && wholeNumber(group.switchAt) > 0 && estimatedMembers(group) >= wholeNumber(group.switchAt)); }
+    function activeGroupFrom(value) { return (Array.isArray(value) ? value : []).find(group => group.status === "active" && validLink(group.url) && !isEstimatedFull(group)); }
     function sameGroupConfig(first, second) { return JSON.stringify(first || []) === JSON.stringify(second || []); }
     function formatHistoryDate(value) {
       const date = new Date(value);
@@ -482,7 +494,7 @@
       dot.classList.toggle("offline", !activeGroup);
       label.textContent = activeGroup ? "Recebendo agora" : "Atenção";
       name.textContent = activeGroup ? activeGroup.name : "Nenhum grupo ativo";
-      detail.textContent = activeGroup ? "Todo novo clique está sendo enviado para este grupo." : "Os botões do site estão sem um destino ativo.";
+      detail.textContent = activeGroup ? "Estimativa atual: " + estimatedMembers(activeGroup).toLocaleString("pt-BR") + " de " + wholeNumber(activeGroup.switchAt, 990).toLocaleString("pt-BR") + "." : "Todos os grupos ativos atingiram o limite estimado ou estão indisponíveis.";
       const undo = document.getElementById("undo-groups");
       undo.disabled = !groupHistory.length;
       document.getElementById("history-summary").textContent = groupHistory.length ? "Último estado salvo em " + formatHistoryDate(groupHistory[0].savedAt) + "." : "Nenhuma alteração anterior para restaurar.";
@@ -496,12 +508,24 @@
       try {
         const snapshot = await getDoc(doc(db, "settings", "groups"));
         const data = snapshot.exists() ? snapshot.data() : {};
-        groups = Array.isArray(data.groups) ? data.groups : defaultGroups();
+        groups = (Array.isArray(data.groups) ? data.groups : defaultGroups()).map((group,index) => ({
+          ...group,
+          autoRoute:group.autoRoute !== false,
+          baselineMembers:wholeNumber(group.baselineMembers, 0),
+          switchAt:wholeNumber(group.switchAt, 990) || 990,
+          routeRevision:String(group.routeRevision || newId()),
+          order:wholeNumber(group.order, index)
+        }));
         groups.sort((a,b) => Number(a.order) - Number(b.order));
+        const counterSnapshots = await Promise.all(groups.map(group => getDoc(doc(db, "routingCounters", group.id))));
+        routeCounters = {};
+        counterSnapshots.forEach((counterSnapshot,index) => {
+          if (counterSnapshot.exists()) routeCounters[groups[index].id] = counterSnapshot.data();
+        });
         lastSavedGroups = cloneGroups(groups);
         groupHistory = Array.isArray(data.history) ? data.history.filter(entry => entry && Array.isArray(entry.groups)).slice(0,10) : [];
         renderGroups();
-        status.textContent = groups.some(group => group.status === "active" && validLink(group.url)) ? "O primeiro grupo ativo da lista está recebendo os cliques." : "Nenhum grupo ativo: os botões do site serão temporariamente desabilitados.";
+        status.textContent = activeGroupFrom(groups) ? "O primeiro grupo ativo abaixo do limite estimado está recebendo os cliques." : "Nenhum grupo disponível: os botões do site serão temporariamente desabilitados.";
         clearDirty();
         renderGroupSafety();
         loadGroupClickCounts();
@@ -518,18 +542,30 @@
       groups.forEach((group, index) => {
         const card = document.createElement("article");
         const isReceiving = receiving && receiving.id === group.id;
+        const autoFull = isEstimatedFull(group);
+        const estimate = estimatedMembers(group);
+        const counter = groupCounter(group);
         card.className = "group-card" + (isReceiving ? " receiving" : "");
         card.dataset.index = String(index);
-        card.innerHTML = `<div class="group-number"><strong>LINK ${index + 1}</strong><small>Prioridade ${index + 1}</small>${isReceiving ? '<span class="receiving-badge">Recebendo agora</span>' : ""}</div>
+        card.innerHTML = `<div class="group-number"><strong>LINK ${index + 1}</strong><small>Prioridade ${index + 1}</small>${isReceiving ? '<span class="receiving-badge">Recebendo agora</span>' : autoFull ? '<span class="receiving-badge estimated">Lotado por estimativa</span>' : ""}</div>
           <label class="name-field">Nome<input data-field="name" maxlength="60" placeholder="Ex.: Grupo 1"></label>
           <label class="link-field">Link do grupo<input data-field="url" type="url" placeholder="https://chat.whatsapp.com/..."></label>
           <label class="status-field">Situação<select data-field="status"><option value="active">Ativo</option><option value="paused">Pausado</option><option value="full">Lotado</option></select></label>
           <div class="group-actions"><button class="quick-full" data-action="full" title="Marcar como lotado e publicar" type="button">Lotado</button><button class="icon-button" data-action="up" title="Subir" type="button">↑</button><button class="icon-button" data-action="down" title="Descer" type="button">↓</button><button class="icon-button" data-action="open" title="Abrir link" type="button">↗</button><button class="icon-button remove" data-action="remove" title="Remover" type="button">×</button></div>
+          <div class="auto-routing">
+            <label>Membros conferidos<input data-field="baselineMembers" type="number" min="0" max="2000" step="1"></label>
+            <label>Trocar ao chegar em<input data-field="switchAt" type="number" min="1" max="2000" step="1"></label>
+            <label class="auto-toggle"><input data-field="autoRoute" type="checkbox"> Trocar automaticamente pela estimativa de cliques</label>
+            <div class="auto-estimate${autoFull ? " full" : ""}" data-estimate><strong>${estimate.toLocaleString("pt-BR")}</strong> membros estimados · ${(counter ? wholeNumber(counter.clicks) : 0).toLocaleString("pt-BR")} clique(s) desde a última conferência</div>
+          </div>
           <div class="group-clicks" data-clicks>Cliques enviados para este grupo: carregando...</div>`;
         card.querySelector('[data-field="name"]').value = group.name || "";
         card.querySelector('[data-field="url"]').value = group.url || "";
         card.querySelector('[data-field="status"]').value = group.status || "paused";
-        card.querySelector('[data-action="full"]').disabled = group.status === "full";
+        card.querySelector('[data-field="baselineMembers"]').value = wholeNumber(group.baselineMembers);
+        card.querySelector('[data-field="switchAt"]').value = wholeNumber(group.switchAt, 990);
+        card.querySelector('[data-field="autoRoute"]').checked = group.autoRoute !== false;
+        card.querySelector('[data-action="full"]').disabled = group.status === "full" || autoFull;
         groupsList.appendChild(card);
       });
     }
@@ -538,14 +574,14 @@
       const card = event.target.closest(".group-card");
       const field = event.target.dataset.field;
       if (!card || !field) return;
-      groups[Number(card.dataset.index)][field] = event.target.value;
+      groups[Number(card.dataset.index)][field] = ["baselineMembers","switchAt"].includes(field) ? wholeNumber(event.target.value) : event.target.value;
       markDirty();
     });
     groupsList.addEventListener("change", event => {
       const card = event.target.closest(".group-card");
       const field = event.target.dataset.field;
       if (!card || !field) return;
-      groups[Number(card.dataset.index)][field] = event.target.value;
+      groups[Number(card.dataset.index)][field] = field === "autoRoute" ? event.target.checked : ["baselineMembers","switchAt"].includes(field) ? wholeNumber(event.target.value) : event.target.value;
       if (field === "status") { renderGroups(); loadGroupClickCounts(); }
       markDirty();
     });
@@ -577,7 +613,7 @@
     });
 
     document.getElementById("add-group").addEventListener("click", () => {
-      groups.push({ id:newId(), name:"Grupo " + (groups.length + 1), url:"", status:"paused", order:groups.length });
+      groups.push({ id:newId(), name:"Grupo " + (groups.length + 1), url:"", status:"paused", order:groups.length, autoRoute:true, baselineMembers:0, switchAt:990, routeRevision:newId() });
       renderGroups(); markDirty();
     });
 
@@ -601,24 +637,66 @@
       status.className = "status-line";
       status.textContent = "Salvando...";
       try {
-        const normalized = groups.map((group,index) => ({ id:String(group.id || newId()), name:String(group.name || "Grupo " + (index + 1)).slice(0,60), url:String(group.url || "").trim(), status:["active","paused","full"].includes(group.status) ? group.status : "paused", order:index }));
-        const activeGroup = normalized.find(group => group.status === "active" && validLink(group.url));
+        const previousById = new Map(lastSavedGroups.map(group => [group.id, group]));
+        const normalized = groups.map((group,index) => {
+          const id = String(group.id || newId());
+          const previous = previousById.get(id);
+          const baselineMembers = wholeNumber(group.baselineMembers);
+          const switchAt = wholeNumber(group.switchAt, 990) || 990;
+          const routingChanged = !previous || wholeNumber(previous.baselineMembers) !== baselineMembers || wholeNumber(previous.switchAt, 990) !== switchAt;
+          return {
+            id,
+            name:String(group.name || "Grupo " + (index + 1)).slice(0,60),
+            url:String(group.url || "").trim(),
+            status:["active","paused","full"].includes(group.status) ? group.status : "paused",
+            order:index,
+            autoRoute:group.autoRoute !== false,
+            baselineMembers,
+            switchAt,
+            routeRevision:routingChanged ? newId() : String(group.routeRevision || newId())
+          };
+        });
         const nextHistory = sameGroupConfig(lastSavedGroups, normalized) ? groupHistory : [{ groups:cloneGroups(lastSavedGroups), savedAt:new Date().toISOString(), savedBy:currentUser ? currentUser.email : ADMIN_EMAIL }, ...groupHistory].slice(0,10);
         const batch = writeBatch(db);
+        const plannedCounters = { ...routeCounters };
+        normalized.forEach(group => {
+          const current = routeCounters[group.id];
+          const resetCounter = !current || String(current.revision || "") !== group.routeRevision || wholeNumber(current.baselineMembers) !== group.baselineMembers || wholeNumber(current.switchAt) !== group.switchAt;
+          if (!resetCounter) return;
+          const counter = {
+            groupId:group.id,
+            revision:group.routeRevision,
+            clicks:0,
+            baselineMembers:group.baselineMembers,
+            switchAt:group.switchAt,
+            lastEventId:"",
+            createdAt:serverTimestamp(),
+            updatedAt:serverTimestamp()
+          };
+          plannedCounters[group.id] = { ...counter, createdAt:new Date(), updatedAt:new Date() };
+          batch.set(doc(db, "routingCounters", group.id), counter);
+        });
+        const activeGroup = normalized.find(group => {
+          const counter = plannedCounters[group.id];
+          const estimate = group.baselineMembers + (counter ? wholeNumber(counter.clicks) : 0);
+          return group.status === "active" && validLink(group.url) && (!group.autoRoute || estimate < group.switchAt);
+        });
         batch.set(doc(db, "settings", "groups"), { groups:normalized, history:nextHistory, updatedAt:serverTimestamp() });
         batch.set(doc(db, "public", "site"), {
           available:Boolean(activeGroup),
           groupId:activeGroup ? activeGroup.id : "",
           groupName:activeGroup ? activeGroup.name : "",
           url:activeGroup ? activeGroup.url : "",
+          groups:normalized.map(group => ({ id:group.id, name:group.name, url:group.url, status:group.status, order:group.order, autoRoute:group.autoRoute, routeRevision:group.routeRevision })),
           updatedAt:serverTimestamp()
         });
         await batch.commit();
         groups = normalized;
+        routeCounters = plannedCounters;
         lastSavedGroups = cloneGroups(normalized);
         groupHistory = nextHistory;
         clearDirty();
-        status.textContent = groups.some(group => group.status === "active" && validLink(group.url)) ? "Configuração publicada. O primeiro grupo ativo já está recebendo os cliques." : "Configuração publicada sem grupos ativos; os botões ficarão desabilitados.";
+        status.textContent = activeGroup ? "Configuração publicada. " + activeGroup.name + " está recebendo os cliques." : "Configuração publicada sem grupos disponíveis; os botões ficarão desabilitados.";
         showToast("Configuração dos grupos salva.");
         renderGroups(); renderGroupSafety(); loadGroupClickCounts();
       } catch (_) {

@@ -57,6 +57,44 @@ service cloud.firestore {
         );
     }
 
+    function isValidCounterIncrement(groupId) {
+      let data = request.resource.data;
+      let eventId = data.lastEventId;
+      let eventPath = /databases/$(database)/documents/events/$(eventId);
+      return data.keys().hasAll([
+          'groupId', 'revision', 'clicks', 'baselineMembers', 'switchAt',
+          'lastEventId', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'groupId', 'revision', 'clicks', 'baselineMembers', 'switchAt',
+          'lastEventId', 'createdAt', 'updatedAt'
+        ])
+        && data.diff(resource.data).affectedKeys().hasOnly(['clicks', 'lastEventId', 'updatedAt'])
+        && data.groupId == groupId
+        && data.groupId == resource.data.groupId
+        && data.groupId.matches('^[A-Za-z0-9_-]{1,64}$')
+        && data.revision == resource.data.revision
+        && isShortString(data.revision, 64)
+        && data.clicks is int
+        && data.clicks == resource.data.clicks + 1
+        && data.baselineMembers is int
+        && data.baselineMembers >= 0
+        && data.baselineMembers <= 2000
+        && data.switchAt is int
+        && data.switchAt > data.baselineMembers
+        && data.switchAt <= 2000
+        && resource.data.baselineMembers + resource.data.clicks < resource.data.switchAt
+        && data.baselineMembers + data.clicks <= data.switchAt
+        && data.lastEventId is string
+        && data.lastEventId.matches('^[A-Za-z0-9_-]{16,58}_click$')
+        && data.updatedAt == request.time
+        && !exists(eventPath)
+        && existsAfter(eventPath)
+        && getAfter(eventPath).data.eventType == 'cta_click'
+        && getAfter(eventPath).data.groupId == groupId
+        && getAfter(eventPath).data.sessionId + '_click' == eventId;
+    }
+
     match /events/{eventId} {
       allow create: if isValidEvent() && isDeterministicEventId(eventId);
       allow read: if isAdmin();
@@ -71,6 +109,13 @@ service cloud.firestore {
     match /public/site {
       allow read: if true;
       allow create, update, delete: if isAdmin();
+    }
+
+    match /routingCounters/{groupId} {
+      allow get: if true;
+      allow list: if isAdmin();
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin() || isValidCounterIncrement(groupId);
     }
 
     match /{document=**} {
