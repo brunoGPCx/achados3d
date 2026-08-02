@@ -89,11 +89,23 @@
     .empty-state { margin:18px 0 0; color:var(--dim); font-size:13px; }
     .groups-toolbar { display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:15px; }
     .groups-toolbar p { margin:0; color:var(--muted); }
+    .group-safety { display:flex; align-items:center; justify-content:space-between; gap:18px; margin:0 0 16px; padding:17px 18px; border:1px solid rgba(37,211,102,.25); border-radius:18px; background:rgba(37,211,102,.065); }
+    .live-summary { display:flex; align-items:center; gap:13px; min-width:0; }
+    .live-dot { width:11px; height:11px; flex:none; border-radius:50%; background:var(--green); box-shadow:0 0 0 7px rgba(37,211,102,.1); }
+    .live-dot.offline { background:var(--red); box-shadow:0 0 0 7px rgba(255,107,107,.1); }
+    .live-summary small,.live-summary span { display:block; color:var(--muted); }
+    .live-summary small { margin-bottom:3px; color:var(--green); font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.12em; }
+    .live-summary strong { display:block; overflow:hidden; font-size:17px; text-overflow:ellipsis; white-space:nowrap; }
+    .history-control { display:flex; align-items:center; gap:12px; flex:none; }
+    .history-control small { max-width:180px; color:var(--dim); text-align:right; }
+    button:disabled { cursor:not-allowed; opacity:.45; }
     .groups-list { display:grid; gap:12px; }
     .group-card { display:grid; grid-template-columns:78px minmax(150px,.8fr) minmax(260px,1.6fr) 150px auto; gap:12px; align-items:end; padding:18px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(145deg,rgba(17,24,39,.96),rgba(8,12,20,.96)); }
+    .group-card.receiving { border-color:rgba(37,211,102,.35); box-shadow:inset 3px 0 0 rgba(37,211,102,.65); }
     .group-number { align-self:center; }
     .group-number strong { display:block; font:800 25px/1 "Barlow Condensed",sans-serif; color:var(--orange); }
     .group-number small { color:var(--dim); }
+    .receiving-badge { display:inline-block; margin-top:7px; padding:4px 7px; border-radius:999px; background:rgba(37,211,102,.1); color:#8bf0ae !important; font-size:9px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
     label { display:block; color:var(--muted); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
     input,select { width:100%; margin-top:7px; padding:11px 12px; border:1px solid var(--line); border-radius:11px; outline:0; background:#080d16; color:var(--ink); }
     input:focus,select:focus { border-color:rgba(255,122,50,.65); box-shadow:0 0 0 3px rgba(255,122,50,.1); }
@@ -101,12 +113,14 @@
     .icon-button { width:39px; height:39px; display:grid; place-items:center; padding:0; border:1px solid var(--line); border-radius:10px; background:#101722; color:var(--muted); }
     .icon-button:hover { color:var(--ink); border-color:rgba(255,122,50,.4); }
     .icon-button.remove:hover { color:var(--red); border-color:rgba(255,107,107,.4); }
+    .quick-full { height:39px; padding:0 10px; border:1px solid rgba(251,191,36,.25); border-radius:10px; background:rgba(251,191,36,.08); color:#ffd86b; font-size:11px; font-weight:800; text-transform:uppercase; }
+    .quick-full:hover { border-color:rgba(251,191,36,.55); }
     .group-clicks { grid-column:2/-1; color:var(--dim); font-size:13px; }
     .savebar { position:sticky; bottom:14px; display:flex; justify-content:space-between; align-items:center; gap:18px; margin-top:18px; padding:14px 16px; border:1px solid var(--line); border-radius:16px; background:rgba(12,17,27,.94); backdrop-filter:blur(14px); box-shadow:0 16px 40px rgba(0,0,0,.3); }
     .savebar span { color:var(--muted); font-size:14px; }
     .toast { position:fixed; right:22px; bottom:22px; z-index:20; padding:13px 17px; border-radius:12px; background:#153d2b; border:1px solid rgba(37,211,102,.3); color:#baf5ce; box-shadow:0 16px 40px rgba(0,0,0,.3); }
     @media(max-width:850px){.group-card{grid-template-columns:68px 1fr 150px}.link-field{grid-column:2/-1}.group-actions{grid-column:2/-1}.metrics-grid{grid-template-columns:1fr}.metric{min-height:118px}.insights-grid{grid-template-columns:1fr}}
-    @media(max-width:580px){.app{width:min(100% - 22px,1180px)}.topbar{align-items:flex-start}.account span{display:none}.section-head{align-items:flex-start;flex-direction:column}.groups-toolbar{align-items:flex-start;flex-direction:column}.group-card{grid-template-columns:1fr}.group-number,.name-field,.link-field,.status-field,.group-actions,.group-clicks{grid-column:1}.group-actions{justify-content:flex-end}.savebar{align-items:stretch;flex-direction:column}.savebar .primary{width:100%}.period-head,.chart-head{align-items:flex-start;flex-direction:column}.chart-legend{justify-content:flex-start}.traffic-chart{grid-auto-columns:34px}}
+    @media(max-width:580px){.app{width:min(100% - 22px,1180px)}.topbar{align-items:flex-start}.account span{display:none}.section-head{align-items:flex-start;flex-direction:column}.groups-toolbar{align-items:flex-start;flex-direction:column}.group-safety{align-items:stretch;flex-direction:column}.history-control{align-items:stretch;flex-direction:column}.history-control small{text-align:left}.group-card{grid-template-columns:1fr}.group-number,.name-field,.link-field,.status-field,.group-actions,.group-clicks{grid-column:1}.group-actions{justify-content:flex-end;flex-wrap:wrap}.savebar{align-items:stretch;flex-direction:column}.savebar .primary{width:100%}.period-head,.chart-head{align-items:flex-start;flex-direction:column}.chart-legend{justify-content:flex-start}.traffic-chart{grid-auto-columns:34px}}
   </style>
 </head>
 <body>
@@ -185,6 +199,10 @@
         <div class="section-head"><div><p class="eyebrow">Destinos dos botões</p><h1>Grupos do WhatsApp</h1><p>O primeiro grupo ativo da lista recebe os novos cliques.</p></div><a class="ghost" href="/" target="_blank" rel="noopener" style="text-decoration:none">Ver site</a></div>
         <div class="groups-toolbar"><p>Marque grupos lotados ou pausados; o próximo ativo assume automaticamente.</p><button class="ghost" id="add-group" type="button">+ Adicionar grupo</button></div>
         <p class="status-line" id="groups-status"></p>
+        <div class="group-safety">
+          <div class="live-summary"><i class="live-dot" id="live-group-dot"></i><div><small id="live-group-label">Recebendo agora</small><strong id="live-group-name">Carregando...</strong><span id="live-group-detail">Conferindo o destino publicado.</span></div></div>
+          <div class="history-control"><small id="history-summary">Nenhuma alteração anterior.</small><button class="ghost" id="undo-groups" type="button" disabled>↶ Desfazer última alteração</button></div>
+        </div>
         <div class="groups-list" id="groups-list"></div>
         <div class="savebar"><span id="save-hint">Nenhuma alteração pendente.</span><button class="primary" id="save-groups" type="button">Salvar configuração</button></div>
       </section>
@@ -217,6 +235,8 @@
     let blockedMessage = "";
     let recentEvents = [];
     let selectedPeriod = 7;
+    let groupHistory = [];
+    let lastSavedGroups = [];
 
     const loginView = document.getElementById("login-view");
     const adminView = document.getElementById("admin-view");
@@ -446,6 +466,27 @@
     function defaultGroups() { return [{ id:"grupo-1", name:"Grupo 1", url:CURRENT_LINK, status:"active", order:0 }]; }
     function newId() { return "grupo-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8); }
     function validLink(value) { try { const url = new URL(value); return url.protocol === "https:" && url.hostname === "chat.whatsapp.com" && url.pathname.length > 2; } catch (_) { return false; } }
+    function cloneGroups(value) { return JSON.parse(JSON.stringify(Array.isArray(value) ? value : [])); }
+    function activeGroupFrom(value) { return (Array.isArray(value) ? value : []).find(group => group.status === "active" && validLink(group.url)); }
+    function sameGroupConfig(first, second) { return JSON.stringify(first || []) === JSON.stringify(second || []); }
+    function formatHistoryDate(value) {
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? "alteração anterior" : new Intl.DateTimeFormat("pt-BR", { dateStyle:"short", timeStyle:"short", timeZone:"America/Sao_Paulo" }).format(date);
+    }
+    function renderGroupSafety() {
+      const activeGroup = activeGroupFrom(lastSavedGroups);
+      const dot = document.getElementById("live-group-dot");
+      const label = document.getElementById("live-group-label");
+      const name = document.getElementById("live-group-name");
+      const detail = document.getElementById("live-group-detail");
+      dot.classList.toggle("offline", !activeGroup);
+      label.textContent = activeGroup ? "Recebendo agora" : "Atenção";
+      name.textContent = activeGroup ? activeGroup.name : "Nenhum grupo ativo";
+      detail.textContent = activeGroup ? "Todo novo clique está sendo enviado para este grupo." : "Os botões do site estão sem um destino ativo.";
+      const undo = document.getElementById("undo-groups");
+      undo.disabled = !groupHistory.length;
+      document.getElementById("history-summary").textContent = groupHistory.length ? "Último estado salvo em " + formatHistoryDate(groupHistory[0].savedAt) + "." : "Nenhuma alteração anterior para restaurar.";
+    }
     function markDirty() { dirty = true; document.getElementById("save-hint").textContent = "Há alterações que ainda não foram salvas."; }
     function clearDirty() { dirty = false; document.getElementById("save-hint").textContent = "Configuração salva e ativa no site."; }
 
@@ -454,11 +495,15 @@
       status.textContent = "Carregando grupos...";
       try {
         const snapshot = await getDoc(doc(db, "settings", "groups"));
-        groups = snapshot.exists() && Array.isArray(snapshot.data().groups) ? snapshot.data().groups : defaultGroups();
+        const data = snapshot.exists() ? snapshot.data() : {};
+        groups = Array.isArray(data.groups) ? data.groups : defaultGroups();
         groups.sort((a,b) => Number(a.order) - Number(b.order));
+        lastSavedGroups = cloneGroups(groups);
+        groupHistory = Array.isArray(data.history) ? data.history.filter(entry => entry && Array.isArray(entry.groups)).slice(0,10) : [];
         renderGroups();
         status.textContent = groups.some(group => group.status === "active" && validLink(group.url)) ? "O primeiro grupo ativo da lista está recebendo os cliques." : "Nenhum grupo ativo: os botões do site serão temporariamente desabilitados.";
         clearDirty();
+        renderGroupSafety();
         loadGroupClickCounts();
         if (recentEvents.length) renderRecentMetrics();
       } catch (_) {
@@ -469,19 +514,22 @@
 
     function renderGroups() {
       groupsList.textContent = "";
+      const receiving = activeGroupFrom(lastSavedGroups);
       groups.forEach((group, index) => {
         const card = document.createElement("article");
-        card.className = "group-card";
+        const isReceiving = receiving && receiving.id === group.id;
+        card.className = "group-card" + (isReceiving ? " receiving" : "");
         card.dataset.index = String(index);
-        card.innerHTML = `<div class="group-number"><strong>LINK ${index + 1}</strong><small>Prioridade ${index + 1}</small></div>
+        card.innerHTML = `<div class="group-number"><strong>LINK ${index + 1}</strong><small>Prioridade ${index + 1}</small>${isReceiving ? '<span class="receiving-badge">Recebendo agora</span>' : ""}</div>
           <label class="name-field">Nome<input data-field="name" maxlength="60" placeholder="Ex.: Grupo 1"></label>
           <label class="link-field">Link do grupo<input data-field="url" type="url" placeholder="https://chat.whatsapp.com/..."></label>
           <label class="status-field">Situação<select data-field="status"><option value="active">Ativo</option><option value="paused">Pausado</option><option value="full">Lotado</option></select></label>
-          <div class="group-actions"><button class="icon-button" data-action="up" title="Subir" type="button">↑</button><button class="icon-button" data-action="down" title="Descer" type="button">↓</button><button class="icon-button" data-action="open" title="Abrir link" type="button">↗</button><button class="icon-button remove" data-action="remove" title="Remover" type="button">×</button></div>
+          <div class="group-actions"><button class="quick-full" data-action="full" title="Marcar como lotado e publicar" type="button">Lotado</button><button class="icon-button" data-action="up" title="Subir" type="button">↑</button><button class="icon-button" data-action="down" title="Descer" type="button">↓</button><button class="icon-button" data-action="open" title="Abrir link" type="button">↗</button><button class="icon-button remove" data-action="remove" title="Remover" type="button">×</button></div>
           <div class="group-clicks" data-clicks>Cliques enviados para este grupo: carregando...</div>`;
         card.querySelector('[data-field="name"]').value = group.name || "";
         card.querySelector('[data-field="url"]').value = group.url || "";
         card.querySelector('[data-field="status"]').value = group.status || "paused";
+        card.querySelector('[data-action="full"]').disabled = group.status === "full";
         groupsList.appendChild(card);
       });
     }
@@ -498,14 +546,29 @@
       const field = event.target.dataset.field;
       if (!card || !field) return;
       groups[Number(card.dataset.index)][field] = event.target.value;
+      if (field === "status") { renderGroups(); loadGroupClickCounts(); }
       markDirty();
     });
-    groupsList.addEventListener("click", event => {
+    groupsList.addEventListener("click", async event => {
       const button = event.target.closest("[data-action]");
       const card = event.target.closest(".group-card");
       if (!button || !card) return;
       const index = Number(card.dataset.index);
       const action = button.dataset.action;
+      if (action === "full") {
+        const target = groups[index];
+        if (!target || target.status === "full") return;
+        const simulated = cloneGroups(groups);
+        simulated[index].status = "full";
+        const next = activeGroupFrom(simulated);
+        const consequence = next ? "Os próximos cliques irão para " + next.name + "." : "Nenhum outro grupo ativo ficará disponível e os botões do site serão desabilitados.";
+        if (!confirm("Marcar " + (target.name || "este grupo") + " como lotado?\n\n" + consequence)) return;
+        groups[index].status = "full";
+        renderGroups();
+        markDirty();
+        await saveGroups();
+        return;
+      }
       if (action === "up" && index > 0) [groups[index - 1], groups[index]] = [groups[index], groups[index - 1]];
       if (action === "down" && index < groups.length - 1) [groups[index + 1], groups[index]] = [groups[index], groups[index + 1]];
       if (action === "open" && validLink(groups[index].url)) window.open(groups[index].url, "_blank", "noopener");
@@ -516,6 +579,17 @@
     document.getElementById("add-group").addEventListener("click", () => {
       groups.push({ id:newId(), name:"Grupo " + (groups.length + 1), url:"", status:"paused", order:groups.length });
       renderGroups(); markDirty();
+    });
+
+    document.getElementById("undo-groups").addEventListener("click", async () => {
+      if (!groupHistory.length) return;
+      const previous = groupHistory[0];
+      if (!confirm("Restaurar a configuração salva em " + formatHistoryDate(previous.savedAt) + "?\n\nA configuração atual também ficará guardada no histórico.")) return;
+      groups = cloneGroups(previous.groups);
+      groups.sort((a,b) => Number(a.order) - Number(b.order));
+      renderGroups();
+      markDirty();
+      await saveGroups();
     });
 
     async function saveGroups() {
@@ -529,8 +603,9 @@
       try {
         const normalized = groups.map((group,index) => ({ id:String(group.id || newId()), name:String(group.name || "Grupo " + (index + 1)).slice(0,60), url:String(group.url || "").trim(), status:["active","paused","full"].includes(group.status) ? group.status : "paused", order:index }));
         const activeGroup = normalized.find(group => group.status === "active" && validLink(group.url));
+        const nextHistory = sameGroupConfig(lastSavedGroups, normalized) ? groupHistory : [{ groups:cloneGroups(lastSavedGroups), savedAt:new Date().toISOString(), savedBy:currentUser ? currentUser.email : ADMIN_EMAIL }, ...groupHistory].slice(0,10);
         const batch = writeBatch(db);
-        batch.set(doc(db, "settings", "groups"), { groups:normalized, updatedAt:serverTimestamp() });
+        batch.set(doc(db, "settings", "groups"), { groups:normalized, history:nextHistory, updatedAt:serverTimestamp() });
         batch.set(doc(db, "public", "site"), {
           available:Boolean(activeGroup),
           groupId:activeGroup ? activeGroup.id : "",
@@ -540,10 +615,12 @@
         });
         await batch.commit();
         groups = normalized;
+        lastSavedGroups = cloneGroups(normalized);
+        groupHistory = nextHistory;
         clearDirty();
         status.textContent = groups.some(group => group.status === "active" && validLink(group.url)) ? "Configuração publicada. O primeiro grupo ativo já está recebendo os cliques." : "Configuração publicada sem grupos ativos; os botões ficarão desabilitados.";
         showToast("Configuração dos grupos salva.");
-        renderGroups(); loadGroupClickCounts();
+        renderGroups(); renderGroupSafety(); loadGroupClickCounts();
       } catch (_) {
         status.className = "status-line error";
         status.textContent = "Não foi possível salvar. Confirme que você está na conta autorizada.";
