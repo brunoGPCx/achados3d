@@ -36,7 +36,9 @@
   s.parentNode.insertBefore(t,s)}(window,document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
   fbq('init','905242675437541');
-  fbq('track','PageView');
+  try {
+    if (window.localStorage.getItem('achados3d_analytics_excluded') !== '1') { fbq('track','PageView'); }
+  } catch (_) { fbq('track','PageView'); }
 </script>
 <!-- End Meta Pixel Code -->
 
@@ -606,8 +608,10 @@
     var buttons = document.querySelectorAll('#cta-top, #cta-main, #cta-final, #cta-sticky');
     buttons.forEach(function (btn) {
       btn.addEventListener('click', function () {
-        if (typeof fbq === 'function') { fbq('track', 'Lead'); }
-        if (typeof gtag === 'function') { gtag('event', 'generate_lead', { event_category: 'whatsapp_group' }); }
+        var excluded = false;
+        try { excluded = window.localStorage.getItem('achados3d_analytics_excluded') === '1'; } catch (_) { /* no-op */ }
+        if (!excluded && typeof fbq === 'function') { fbq('track', 'Lead'); }
+        if (!excluded && typeof gtag === 'function') { gtag('event', 'generate_lead', { event_category: 'whatsapp_group' }); }
       });
     });
   })();

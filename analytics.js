@@ -8,8 +8,10 @@
   var COMMIT_URL = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID +
     "/databases/(default)/documents:commit";
   var SESSION_KEY = "achados3d_analytics_session";
-  var STARTED_KEY = "achados3d_analytics_started";
+  var LAST_ACTIVITY_KEY = "achados3d_analytics_last_activity";
   var CLICKED_KEY = "achados3d_analytics_clicked";
+  var EXCLUDED_KEY = "achados3d_analytics_excluded";
+  var SESSION_WINDOW_MS = 30 * 60 * 1000;
 
   function randomId() {
     if (window.crypto && window.crypto.getRandomValues) {
@@ -23,11 +25,11 @@
   }
 
   function storageGet(key) {
-    try { return window.sessionStorage.getItem(key); } catch (_) { return null; }
+    try { return window.localStorage.getItem(key); } catch (_) { return null; }
   }
 
   function storageSet(key, value) {
-    try { window.sessionStorage.setItem(key, value); } catch (_) { /* no-op */ }
+    try { window.localStorage.setItem(key, value); } catch (_) { /* no-op */ }
   }
 
   function clean(value, limit) {
@@ -55,11 +57,18 @@
     try { return new URL(document.referrer).hostname; } catch (_) { return ""; }
   }
 
+  if (storageGet(EXCLUDED_KEY) === "1") return;
+
+  var now = Date.now();
   var sessionId = storageGet(SESSION_KEY);
-  if (!sessionId || !/^[A-Za-z0-9_-]{16,64}$/.test(sessionId)) {
+  var lastActivity = Number(storageGet(LAST_ACTIVITY_KEY));
+  var isNewSession = !sessionId || !/^[A-Za-z0-9_-]{16,64}$/.test(sessionId) ||
+    !Number.isFinite(lastActivity) || now - lastActivity > SESSION_WINDOW_MS || now < lastActivity;
+  if (isNewSession) {
     sessionId = randomId();
     storageSet(SESSION_KEY, sessionId);
   }
+  storageSet(LAST_ACTIVITY_KEY, String(now));
 
   var search = new URLSearchParams(window.location.search);
   var day = saoPauloDay();
@@ -137,17 +146,16 @@
     });
   }
 
-  if (!storageGet(STARTED_KEY)) {
-    storageSet(STARTED_KEY, "1");
+  if (isNewSession) {
     sendEvent("session_start", "", "").catch(function () { /* no-op */ });
+    sendEvent("page_view", "", "").catch(function () { /* no-op */ });
   }
-  sendEvent("page_view", "", "").catch(function () { /* no-op */ });
 
   var buttons = document.querySelectorAll("#cta-top, #cta-main, #cta-final, #cta-sticky");
   buttons.forEach(function (button) {
     button.addEventListener("click", function () {
-      if (button.getAttribute("aria-disabled") === "true" || storageGet(CLICKED_KEY)) return;
-      storageSet(CLICKED_KEY, "1");
+      if (button.getAttribute("aria-disabled") === "true" || storageGet(CLICKED_KEY) === sessionId) return;
+      storageSet(CLICKED_KEY, sessionId);
       var groupId = button.dataset.groupId || "grupo-1";
       if (button.dataset.autoCounter === "1") sendCountedClick(button.id, groupId);
       else sendEvent("cta_click", button.id, groupId).catch(function () { /* no-op */ });

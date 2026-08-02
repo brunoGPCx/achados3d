@@ -287,6 +287,7 @@
         return;
       }
       currentUser = user;
+      try { window.localStorage.setItem("achados3d_analytics_excluded", "1"); } catch (_) { /* no-op */ }
       loginView.hidden = true;
       adminView.hidden = false;
       document.getElementById("account-email").textContent = user.email;
