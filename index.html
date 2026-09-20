@@ -603,15 +603,16 @@
     els.forEach(function (el) { io.observe(el); });
   })();
 
-  // Conversion tracking: fires only if a pixel is present on the page.
+  // CTA tracking only. The standard Lead event is fired by RealLead
+  // after the visitor actually joins a WhatsApp group.
   (function () {
     var buttons = document.querySelectorAll('#cta-top, #cta-main, #cta-final, #cta-sticky');
     buttons.forEach(function (btn) {
       btn.addEventListener('click', function () {
         var excluded = false;
         try { excluded = window.localStorage.getItem('achados3d_analytics_excluded') === '1'; } catch (_) { /* no-op */ }
-        if (!excluded && typeof fbq === 'function') { fbq('track', 'Lead'); }
-        if (!excluded && typeof gtag === 'function') { gtag('event', 'generate_lead', { event_category: 'whatsapp_group' }); }
+        if (!excluded && typeof fbq === 'function') { fbq('trackCustom', 'WhatsAppClick'); }
+        if (!excluded && typeof gtag === 'function') { gtag('event', 'whatsapp_click', { event_category: 'whatsapp_group' }); }
       });
     });
   })();
