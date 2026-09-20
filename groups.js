@@ -31,10 +31,20 @@
     return field && typeof field.booleanValue === "boolean" ? field.booleanValue : fallback;
   }
 
-  function validWhatsAppLink(value) {
+  function isRealLeadLink(value) {
     try {
       var url = new URL(value);
-      return url.protocol === "https:" && url.hostname === "chat.whatsapp.com" && url.pathname.length > 2;
+      return url.protocol === "https:" && url.hostname === "groups.reallead.com.br" && url.pathname.length > 1;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function validDestinationLink(value) {
+    try {
+      var url = new URL(value);
+      var isWhatsApp = url.hostname === "chat.whatsapp.com" && url.pathname.length > 2;
+      return url.protocol === "https:" && (isWhatsApp || isRealLeadLink(value));
     } catch (_) {
       return false;
     }
@@ -70,7 +80,7 @@
   }
 
   function fetchCounter(group) {
-    if (!group.autoRoute || !group.id) return Promise.resolve(null);
+    if (!group.autoRoute || isRealLeadLink(group.url) || !group.id) return Promise.resolve(null);
     var url = DOCUMENTS_URL + "routingCounters/" + encodeURIComponent(group.id) +
       "?key=" + encodeURIComponent(API_KEY);
     return fetch(url, { mode: "cors", credentials: "omit", cache: "no-store" })
@@ -84,7 +94,7 @@
   }
 
   function isEstimatedFull(group, counter) {
-    return Boolean(group.autoRoute && counter && counter.groupId === group.id && counter.switchAt > 0 &&
+    return Boolean(!isRealLeadLink(group.url) && group.autoRoute && counter && counter.groupId === group.id && counter.switchAt > 0 &&
       (!group.routeRevision || counter.revision === group.routeRevision) &&
       counter.baselineMembers + counter.clicks >= counter.switchAt);
   }
@@ -93,13 +103,13 @@
     buttons.forEach(function (button) {
       button.href = group.url;
       button.dataset.groupId = group.id;
-      button.dataset.autoCounter = counter && group.autoRoute && (!group.routeRevision || counter.revision === group.routeRevision) ? "1" : "0";
+      button.dataset.autoCounter = !isRealLeadLink(group.url) && counter && group.autoRoute && (!group.routeRevision || counter.revision === group.routeRevision) ? "1" : "0";
       button.removeAttribute("aria-disabled");
     });
     var routing = {
       groupId: group.id,
       groupName: group.name,
-      autoCounter: Boolean(counter && group.autoRoute && (!group.routeRevision || counter.revision === group.routeRevision)),
+      autoCounter: Boolean(!isRealLeadLink(group.url) && counter && group.autoRoute && (!group.routeRevision || counter.revision === group.routeRevision)),
       estimatedMembers: counter ? counter.baselineMembers + counter.clicks : null,
       switchAt: counter ? counter.switchAt : null
     };
@@ -155,7 +165,7 @@
           name: stringField(fields, "groupName"),
           url: stringField(fields, "url")
         };
-        if (available && validWhatsAppLink(legacyGroup.url)) applyGroup(legacyGroup, null);
+        if (available && validDestinationLink(legacyGroup.url)) applyGroup(legacyGroup, null);
         else disableButtons();
         return;
       }
@@ -166,7 +176,7 @@
           return Promise.resolve();
         }
         var group = groups[index];
-        if (group.status !== "active" || !validWhatsAppLink(group.url)) return selectNext(index + 1);
+        if (group.status !== "active" || !validDestinationLink(group.url)) return selectNext(index + 1);
         return fetchCounter(group).then(function (counter) {
           if (isEstimatedFull(group, counter)) return selectNext(index + 1);
           applyGroup(group, counter);

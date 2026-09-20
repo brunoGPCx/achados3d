@@ -474,12 +474,13 @@
 
     function defaultGroups() { return [{ id:"grupo-1", name:"Grupo 1", url:CURRENT_LINK, status:"active", order:0, autoRoute:true, baselineMembers:0, switchAt:990, routeRevision:newId() }]; }
     function newId() { return "grupo-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8); }
-    function validLink(value) { try { const url = new URL(value); return url.protocol === "https:" && url.hostname === "chat.whatsapp.com" && url.pathname.length > 2; } catch (_) { return false; } }
+    function isRealLeadLink(value) { try { const url = new URL(value); return url.protocol === "https:" && url.hostname === "groups.reallead.com.br" && url.pathname.length > 1; } catch (_) { return false; } }
+    function validLink(value) { try { const url = new URL(value); const isWhatsApp = url.hostname === "chat.whatsapp.com" && url.pathname.length > 2; return url.protocol === "https:" && (isWhatsApp || isRealLeadLink(value)); } catch (_) { return false; } }
     function cloneGroups(value) { return JSON.parse(JSON.stringify(Array.isArray(value) ? value : [])); }
     function wholeNumber(value, fallback = 0) { const number = Number(value); return Number.isFinite(number) ? Math.max(0, Math.round(number)) : fallback; }
     function groupCounter(group) { return group && routeCounters[group.id] ? routeCounters[group.id] : null; }
     function estimatedMembers(group) { const counter = groupCounter(group); return wholeNumber(group.baselineMembers, counter ? wholeNumber(counter.baselineMembers) : 0) + (counter ? wholeNumber(counter.clicks) : 0); }
-    function isEstimatedFull(group) { return Boolean(group && group.autoRoute !== false && wholeNumber(group.switchAt) > 0 && estimatedMembers(group) >= wholeNumber(group.switchAt)); }
+    function isEstimatedFull(group) { return Boolean(group && !isRealLeadLink(group.url) && group.autoRoute !== false && wholeNumber(group.switchAt) > 0 && estimatedMembers(group) >= wholeNumber(group.switchAt)); }
     function activeGroupFrom(value) { return (Array.isArray(value) ? value : []).find(group => group.status === "active" && validLink(group.url) && !isEstimatedFull(group)); }
     function sameGroupConfig(first, second) { return JSON.stringify(first || []) === JSON.stringify(second || []); }
     function formatHistoryDate(value) {
@@ -495,7 +496,7 @@
       dot.classList.toggle("offline", !activeGroup);
       label.textContent = activeGroup ? "Recebendo agora" : "Atenção";
       name.textContent = activeGroup ? activeGroup.name : "Nenhum grupo ativo";
-      detail.textContent = activeGroup ? "Estimativa atual: " + estimatedMembers(activeGroup).toLocaleString("pt-BR") + " de " + wholeNumber(activeGroup.switchAt, 990).toLocaleString("pt-BR") + "." : "Todos os grupos ativos atingiram o limite estimado ou estão indisponíveis.";
+      detail.textContent = activeGroup ? (isRealLeadLink(activeGroup.url) ? "Distribuição e lotação gerenciadas automaticamente pelo Real Lead." : "Estimativa atual: " + estimatedMembers(activeGroup).toLocaleString("pt-BR") + " de " + wholeNumber(activeGroup.switchAt, 990).toLocaleString("pt-BR") + ".") : "Todos os grupos ativos atingiram o limite estimado ou estão indisponíveis.";
       const undo = document.getElementById("undo-groups");
       undo.disabled = !groupHistory.length;
       document.getElementById("history-summary").textContent = groupHistory.length ? "Último estado salvo em " + formatHistoryDate(groupHistory[0].savedAt) + "." : "Nenhuma alteração anterior para restaurar.";
@@ -550,7 +551,7 @@
         card.dataset.index = String(index);
         card.innerHTML = `<div class="group-number"><strong>LINK ${index + 1}</strong><small>Prioridade ${index + 1}</small>${isReceiving ? '<span class="receiving-badge">Recebendo agora</span>' : autoFull ? '<span class="receiving-badge estimated">Lotado por estimativa</span>' : ""}</div>
           <label class="name-field">Nome<input data-field="name" maxlength="60" placeholder="Ex.: Grupo 1"></label>
-          <label class="link-field">Link do grupo<input data-field="url" type="url" placeholder="https://chat.whatsapp.com/..."></label>
+          <label class="link-field">Link de destino<input data-field="url" type="url" placeholder="WhatsApp ou groups.reallead.com.br/..."></label>
           <label class="status-field">Situação<select data-field="status"><option value="active">Ativo</option><option value="paused">Pausado</option><option value="full">Lotado</option></select></label>
           <div class="group-actions"><button class="quick-full" data-action="full" title="Marcar como lotado e publicar" type="button">Lotado</button><button class="icon-button" data-action="up" title="Subir" type="button">↑</button><button class="icon-button" data-action="down" title="Descer" type="button">↓</button><button class="icon-button" data-action="open" title="Abrir link" type="button">↗</button><button class="icon-button remove" data-action="remove" title="Remover" type="button">×</button></div>
           <div class="auto-routing">
@@ -633,7 +634,7 @@
       const status = document.getElementById("groups-status");
       const button = document.getElementById("save-groups");
       const invalid = groups.find(group => group.status === "active" && !validLink(group.url));
-      if (invalid) { status.className = "status-line error"; status.textContent = (invalid.name || "Um grupo ativo") + " precisa de um link válido do chat.whatsapp.com."; return; }
+      if (invalid) { status.className = "status-line error"; status.textContent = (invalid.name || "Um grupo ativo") + " precisa de um link válido do WhatsApp ou do Real Lead."; return; }
       button.disabled = true;
       status.className = "status-line";
       status.textContent = "Salvando...";
@@ -645,13 +646,14 @@
           const baselineMembers = wholeNumber(group.baselineMembers);
           const switchAt = wholeNumber(group.switchAt, 990) || 990;
           const routingChanged = !previous || wholeNumber(previous.baselineMembers) !== baselineMembers || wholeNumber(previous.switchAt, 990) !== switchAt;
+          const url = String(group.url || "").trim();
           return {
             id,
             name:String(group.name || "Grupo " + (index + 1)).slice(0,60),
-            url:String(group.url || "").trim(),
+            url,
             status:["active","paused","full"].includes(group.status) ? group.status : "paused",
             order:index,
-            autoRoute:group.autoRoute !== false,
+            autoRoute:isRealLeadLink(url) ? false : group.autoRoute !== false,
             baselineMembers,
             switchAt,
             routeRevision:routingChanged ? newId() : String(group.routeRevision || newId())
